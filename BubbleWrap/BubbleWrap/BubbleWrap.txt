@@ -1,0 +1,177 @@
+/*
+Задача . Пупырка
+
+После посылки из Китая осталась спец. плёнка для бережной перевозки груза — пупырка.
+Всего в пупырке 12 на 12 шариков-пузырьков.
+Состояние любого пузырька — это всегда либо он целый, либо нет, т.е. true или false (тип массива bool).
+Для начала, требуется реализовать отдельную функцию инициализации пупырки начальным состоянием — полностью целая пупырка,
+т.е. все элементы true. Но это только самое начало.
+
+Программа заключается в последовательном лопанье целых регионов пузырьков.
+Перед каждым таким лопаньем надо показывать пользователю полностью всю плёнку:
+o — это целый пузырёк, x — лопнутый.
+Это тоже надо выделить в отдельную функцию.
+Итак, как выглядит само лопанье.
+Пользователь вводит две координаты: координаты начала региона и конца прямоугольного региона.
+Сама процедура лопанья пузырей должна быть реализована с помощью отдельной функции,
+все аргументы должны проверяться на их валидность,
+что они в в рамках диапазона возможных значений — иначе должна быть выведена ошибка.
+После лопанья каждого пузыря, который не был ещё лопнут до того, в консоль должно выводиться сообщение “Pop!”.
+
+Лопанье должно продолжаться до последнего пузырька.
+Как только вся пупырка потрачена, программа заканчивает выполнение.
+В принципе, вы можете подсчитать окончание в самой функции по отображению пузырьков плёнки,
+т.к. она выполняется после каждого лопанья.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Размер пупырчатой плёнки
+const int Size = 12;
+
+// Заполнить пупырчатую плёнку
+void fillBubbleWrap(bool (&BubbleWrap)[Size][Size], int wrapSize);
+// Вывести пупырчатую плёнку
+void outBubbleWrap(bool(&BubbleWrap)[Size][Size], int wrapSize);
+// Лопнуть сектор пупырчатой плёнки
+void burstBubbleWrapSector(bool(&BubbleWrap)[Size][Size], int wrapSize,
+	int x1, int y1, // левый верхний угол сектора
+	int x2, int y2);// правый нижний угол сектора
+// Есть ли ещё целые пузыри
+bool thereAreNoBurstBubbles(bool(&BubbleWrap)[Size][Size], int wrapSize);
+// Лопать пузырчатую плёнку
+void burstBubbleWrap(bool(&BubbleWrap)[Size][Size], int wrapSize);
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+
+	// Создаём статический массив
+	bool BubbleWrap[Size][Size];
+	// Инициализируем его
+	fillBubbleWrap(BubbleWrap, Size);
+	// Лопаем плёнку
+	burstBubbleWrap(BubbleWrap, Size);
+
+	return 0;
+}
+
+void fillBubbleWrap(bool(&BubbleWrap)[Size][Size], int wrapSize)
+{
+	for (int i = 0; i < wrapSize; i++)
+	{
+		for (int j = 0; j < wrapSize; j++)
+		{
+			// Заполняем плёнку True - то есть целый
+			BubbleWrap[i][j] = true;
+		}
+	}
+}
+
+void outBubbleWrap(bool(&BubbleWrap)[Size][Size], int wrapSize)
+{
+	for (int i = 0; i < wrapSize; i++)
+	{
+		for (int j = 0; j < wrapSize; j++)
+		{
+			if (BubbleWrap[i][j])
+			{
+				// Если целый, то 'o'
+				cout << 'o';
+			}
+			else
+			{
+				// Если лопнул, то 'x'
+				cout << 'x';
+			}
+			cout << ' ';
+		}
+		cout << '\n';
+	}
+}
+
+void burstBubbleWrapSector(bool(&BubbleWrap)[Size][Size], int wrapSize,
+	int x1, int y1,
+	int x2, int y2)
+{
+	// Если точки выходят за границу, то выходим
+	if (x1 >= wrapSize || x2 >= wrapSize ||
+		y1 >= wrapSize || y2 >= wrapSize ||
+		x1 < 0 || x2 < 0 ||
+		y1 < 0 || y2 < 0)
+	{
+		cout << "Точки выходят за границу пупырчатой плёнки!\n";
+	}
+	// иначе начинаем лопать
+	else
+	{
+		for (int i = x1; i <= x2; i++)
+		{
+			for (int j = y1; j <= y2; j++)
+			{
+				// если пузырь целый
+				if (BubbleWrap[i][j])
+				{
+					// лопаем его
+					BubbleWrap[i][j] = false;
+					// и выводим "Pop!\n"
+					cout << "Pop!\n";
+				}
+			}
+		}
+	}
+}
+
+bool thereAreNoBurstBubbles(bool(&BubbleWrap)[Size][Size], int wrapSize)
+{
+	for (int i = 0; i < wrapSize; i++)
+	{
+		for (int j = 0; j < wrapSize; j++)
+		{
+			if (BubbleWrap[i][j])
+			{
+				// если нашли целый пузырь, то true
+				return true;
+			}
+		}
+	}
+
+	// если не нашли false
+	return false;
+}
+
+void burstBubbleWrap(bool(&BubbleWrap)[Size][Size], int wrapSize)
+{
+	int x1, y1, x2, y2;
+
+	do
+	{
+		cout << "Введите координаты первой точки:\nx: ";
+		cin >> x1;
+		cout << "y: ";
+		cin >> y1;
+		cout << "Введите координаты второй точки:\nx: ";
+		cin >> x2;
+		cout << "y: ";
+		cin >> y2;
+
+		// если первая точка правее, меняем координты
+		if (x2 < x1)
+		{
+			swap(x2, x1);
+		}
+		// если первая точка ниже, меняем координаты
+		if (y1 > y2)
+		{
+			swap(y2, y1);
+		}
+
+		burstBubbleWrapSector(BubbleWrap, wrapSize, x1, y1, x2, y2);
+
+		cout << "Плёнка после лопанья:\n";
+		outBubbleWrap(BubbleWrap, wrapSize);
+
+	} while (thereAreNoBurstBubbles(BubbleWrap, wrapSize));
+}

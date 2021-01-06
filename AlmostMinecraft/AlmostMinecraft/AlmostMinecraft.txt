@@ -1,0 +1,129 @@
+/*
+Нам всё-таки предстоит сделать некое подобие Майнкрафта.
+Миллионов не обещаю, но это довольно интересная задача на пространственное мышление.
+У нас есть небольшой квадратный ландшафт, размером 5х5 секторов.
+В каждом секторе располагается блок (столбик) ландшафта,
+максимальная высота которого — это 10 блоков.
+Текущая высота каждого такого блока задаётся пользователем вначале программы.
+Итоговая задача — используя трёхмерный массив вывести в стандартный вывод горизонтальное сечение
+(или горизонтальный срез) нашего небольшого мира.
+Сам мир как раз должен быть представлен в виде трёхмерного массива.
+Его горизонтальный срез стало быть — это двумерный массив, который надо отобразить в виде единиц и нулей.
+0 — это отсутствие элемента на данном уровне в данной точке, 1 — элемент есть.
+
+Уровень среза от 0 до 9 включительно — также задаётся в стандартном вводе.
+*/
+
+#include <iostream>
+
+using namespace std;
+
+const int Size = 5;
+const int Height = 10;
+
+void inputChunk(bool(&Chunk)[Size][Size][Height], int size, int height);
+void horizontalCut(bool(&Chunk)[Size][Size][Height], int size, int height, int horizontLevel);
+void initChunk(bool(&Chunk)[Size][Size][Height], int size, int height);
+
+void menu()
+{
+	cout << "1) Заполнить чанк\n"
+		<< "2) Получить горизонтальный срез\n"
+		<< "3) Выход\n";
+}
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+
+	bool Chunk[Size][Size][Height];
+	// на случай если кто-то захочет получить срез до заполнения
+	initChunk(Chunk, Size, Height);
+	
+	int command = 4;
+
+	do
+	{
+		menu();
+		cout << "> ";
+		cin >> command;
+
+		switch (command)
+		{
+		case 1:
+		{
+			inputChunk(Chunk, Size, Height);
+			break;
+		}
+		case 2:
+		{
+			int horizontLevel;
+			cout << "Введите на какой высоте надо сделать срез: ";
+			cin >> horizontLevel;
+
+			if (horizontLevel >= Height || horizontLevel < 0)
+			{
+				cout << "Высота неправильно задана!\n";
+			}
+
+			horizontalCut(Chunk, Size, Height, horizontLevel);
+			break;
+		}
+		}
+	} while (command != 3);
+}
+
+void inputChunk(bool(&Chunk)[Size][Size][Height], int size, int height)
+{
+	bool tmp;
+
+	cout << "0 - пусто, не 0 - не пусто\n";
+
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			cout << "Сейчас вводится столбец с координатами (" << i << ", " << j << ")\n";
+			for (int k = 0; k < height; k++)
+			{
+				cout << k << ": ";
+				cin >> tmp;
+				Chunk[i][j][k] = tmp;
+			}
+		}
+	}
+}
+
+void horizontalCut(bool(&Chunk)[Size][Size][Height], int size, int height, int horizontLevel)
+{
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (Chunk[i][j][horizontLevel])
+			{
+				cout << 1;
+			}
+			else
+			{
+				cout << 0;
+			}
+			cout << ' ';
+		}
+		cout << '\n';
+	}
+}
+
+void initChunk(bool(&Chunk)[Size][Size][Height], int size, int height)
+{
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			for (int k = 0; k < height; k++)
+			{
+				Chunk[i][j][k] = false;
+			}
+		}
+	}
+}
