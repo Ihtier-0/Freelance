@@ -1,0 +1,10 @@
+1 sleep phew!phew!
+2 sleep phew!phew!
+3 awake phew!phew!
+4 awake quack!quack!
+5 awake quack!quack!
+6 sleep phew!phew!
+7 awake quack!quack!
+8 awake phew!phew!
+9 sleep quack!quack!
+10 sleep quack!quack!
