@@ -32,7 +32,8 @@ bool task_1(DoublyLinkedList &Dlist)
 		{
 			std::string tmpStr = tmp->info.get_fullName();
 
-			std::cout << tmpStr << '\n';
+			std::cout << tmpStr << '\n'
+				<< tmp->info.get_address().street << ' ' << tmp->info.get_address().apartment << ' ' << tmp->info.get_address().houseNumber << "\n\n";
 
 			while (tmp->next && tmp->info.get_fullName() == tmpStr)
 			{

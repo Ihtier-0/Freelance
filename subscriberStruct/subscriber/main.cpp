@@ -29,7 +29,8 @@ bool task_1(DoublyLinkedList &Dlist)
 	{
 		if (tmp->info.fullName == tmp->next->info.fullName)
 		{
-			std::cout << tmp->info.fullName << '\n';
+			std::cout << tmp->info.fullName << '\n' 
+				<< tmp->info.address.street << ' ' << tmp->info.address.houseNumber << ' ' << tmp->info.address.apartment << "\n\n";
 			
 			std::string tmpStr = tmp->info.fullName;
 
