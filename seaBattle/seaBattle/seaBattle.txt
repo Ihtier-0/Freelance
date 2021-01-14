@@ -36,14 +36,19 @@ using namespace std;
 
 const int Size = 10;
 
+// ининциализировать игровое поле пустыми клетками
 void initializePlayingField(bool(&playingField)[Size][Size], int size);
-void printPlayingField(bool(&playingField)[Size][Size], int size);
+// поставить к-местный корабль
 bool deliverKDeckShip(bool(&playingField)[Size][Size], int size, int k,
 	int x1, int y1,
 	int x2, int y2);
+// заполнить игровое поле
 void fillPlayingField(bool(&playingField)[Size][Size], int size);
+// начать игру
 void playGame(bool(&playingField1)[Size][Size], bool(&playingField2)[Size][Size], int size);
+// пустое ли поле
 bool isEmptyPlayingField(bool(&playingField)[Size][Size], int size);
+// сделать выстрел
 bool fire(bool(&playingField)[Size][Size], int size, int x, int y);
 
 int main()
@@ -81,26 +86,6 @@ void initializePlayingField(bool(&playingField)[Size][Size], int size)
 		{
 			playingField[i][j] = false;
 		}
-	}
-}
-
-void printPlayingField(bool(&playingField)[Size][Size], int size)
-{
-	for (int i = 0; i < size; ++i)
-	{
-		for (int j = 0; j < size; ++j)
-		{
-			if (playingField[i][j])
-			{
-				cout << 'o';
-			}
-			else
-			{
-				cout << '#';
-			}
-			cout << ' ';
-		}
-		cout << '\n';
 	}
 }
 
@@ -172,6 +157,8 @@ bool deliverKDeckShip(bool(&playingField)[Size][Size], int size, int k, int x1, 
 			return false;
 		}
 	}
+
+	return true;
 }
 
 void fillPlayingField(bool(&playingField)[Size][Size], int size)
@@ -261,6 +248,7 @@ void playGame(bool(&playingField1)[Size][Size], bool(&playingField2)[Size][Size]
 			cin >> y;
 		} while (fire(playingField2, size, x, y) && !isEmptyPlayingField(playingField2, size));
 
+		// на случай если первый игрок выиграл, чтобы второй не начинал свой ход
 		if (isEmptyPlayingField(playingField2, size))
 		{
 			return;

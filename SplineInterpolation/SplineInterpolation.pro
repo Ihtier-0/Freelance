@@ -13,6 +13,8 @@ include(Camera/Camera.pri)
 include(ExplicitGraphOfFunction/ExplicitGraphOfFunction.pri)
 include(ObjectToDraw/ObjectToDraw.pri)
 include(Grid/Grid.pri)
+include(SweepMethod/SweepMethod.pri)
+include(CubicSpline/CubicSpline.pri)
 
 LIBS += -lOpengl32
 

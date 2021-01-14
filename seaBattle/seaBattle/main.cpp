@@ -157,6 +157,8 @@ bool deliverKDeckShip(bool(&playingField)[Size][Size], int size, int k, int x1, 
 			return false;
 		}
 	}
+
+	return true;
 }
 
 void fillPlayingField(bool(&playingField)[Size][Size], int size)

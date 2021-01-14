@@ -5,6 +5,7 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 
+// объект для рисования
 class ObjectToDraw
 {
 public:

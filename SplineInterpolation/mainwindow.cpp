@@ -8,6 +8,9 @@ MainWindow::MainWindow(Viewport *viewport, QWidget *parent)
 //    ui->setupUi(this);
 
     setCentralWidget(m_viewport);
+
+    this->setFocusPolicy(Qt::NoFocus);
+    m_viewport->setFocusPolicy(Qt::StrongFocus);
 }
 
 MainWindow::~MainWindow()

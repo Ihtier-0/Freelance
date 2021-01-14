@@ -3,11 +3,13 @@
 
 #include "explicitgraphoffunction.h"
 
+#define DEBUG
+
 ExplicitGraphOfFunction::ExplicitGraphOfFunction(const ExplicitGraphOfFunction::Function &a_y_x,
                                                  const qreal &a_step, const qreal &a_begin, const qreal &a_end)
     : m_y_x(a_y_x), m_step(a_step), m_begin(a_begin), m_end(a_end)
 {
-    m_color = QColorConstants::DarkMagenta;
+    m_color = QColorConstants::Red;
 }
 
 void ExplicitGraphOfFunction::draw(const QMatrix4x4 &viewMatrix)
@@ -30,6 +32,10 @@ void ExplicitGraphOfFunction::draw(const QMatrix4x4 &viewMatrix)
 
         glVertex3f(begin.x(), begin.y(), 0);
         glVertex3f(end.x(), end.y(), 0);
+
+#ifdef DEBUG
+   qDebug() << this << begin << end;
+#endif
     }
 
     begin = drawMatrix * QVector4D(x, m_y_x(x), 0, 1);

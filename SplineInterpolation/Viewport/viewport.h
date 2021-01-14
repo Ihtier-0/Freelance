@@ -7,6 +7,8 @@
 #include "Camera/camera.h"
 #include "ObjectToDraw/objecttodraw.h"
 
+#include <QWheelEvent>
+
 class Viewport : public QOpenGLWidget
 {
     Q_OBJECT
@@ -17,6 +19,8 @@ protected:
     void initializeGL() override;
     void resizeGL(qint32 width, qint32 height) override;
     void paintGL() override;
+
+    void wheelEvent(QWheelEvent* event) override;
 private:
     QColor m_backgroundColor = QColorConstants::Gray;
     Camera *m_camera;

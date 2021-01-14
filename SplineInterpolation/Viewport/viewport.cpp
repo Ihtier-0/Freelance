@@ -40,6 +40,22 @@ void Viewport::paintGL()
     }
 }
 
+void Viewport::wheelEvent(QWheelEvent *event)
+{
+#ifdef DEBUG
+    qDebug() << "Viewport::wheelEvent " << event << "\n\tmod: "<< event->modifiers();
+#endif
+
+    QPoint angel = event->angleDelta();
+
+    if(event->modifiers() == Qt::ControlModifier)
+    {
+        m_camera->scaling(QVector3D(1 + 0.001 * angel.y(), 1 + 0.001 * angel.y(), 1));
+    }
+
+    this->update();
+}
+
 void Viewport::addObject(ObjectToDraw *objectToDraw)
 {
     m_objectsToDraw.push_back(objectToDraw);
