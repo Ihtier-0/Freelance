@@ -21,13 +21,6 @@ void cubicSpline::draw(const QMatrix4x4 &viewMatrix)
     QVector<qreal> SecondDerivative = calculateSecondDerivative(points);
     quint64 size = points.size();
 
-#ifdef DEBUG
-    qDebug() << "points" << points;
-#endif
-#ifdef DEBUG
-    qDebug() << "SecondDerivative" << SecondDerivative;
-#endif
-
     for(quint64 i = 1; i < size; ++i)
     {
         glColor3f(m_color.redF(), m_color.greenF(), m_color.blueF());
@@ -45,19 +38,18 @@ void cubicSpline::draw(const QMatrix4x4 &viewMatrix)
                     + SecondDerivative[i] * (x - points[i - 1].x()));
         };
 
-#ifdef DEBUG
-    qDebug() << "phi(" << points[i - 1].x() << ") " << phi(points[i - 1].x());
-        qDebug() << "phi("<< points[i].x() << phi(points[i].x());
-#endif
-
+        // начало и конец отрезка
         QVector4D begin, end;
+        // матрица для перевода в координаты камеры
         QMatrix4x4 drawMatrix = viewMatrix * m_modelMatrix;
 
+        // начало отрезка [x[i-1], x[i]]
         qreal x = points[i - 1].x();
 
         glLineWidth(3);
 
         glBegin(GL_LINES);
+        // чертим функцию от x[i-1] до x[i] - m_step/10. с шагом m_step/10.
         for(; x < points[i].x() - m_step/10. ; x += m_step/10.)
         {
             begin = drawMatrix * QVector4D(x, phi(x), 0, 1);
@@ -72,6 +64,7 @@ void cubicSpline::draw(const QMatrix4x4 &viewMatrix)
     #endif
         }
 
+        // соединяем последнюю точку из цикла и точку на конце отрезка
         begin = drawMatrix * QVector4D(x, phi(x), 0, 1);
         end = drawMatrix *
                 QVector4D(points[i].x(), phi(points[i].x()), 0, 1);
