@@ -4,7 +4,7 @@
 #include "h_circle.h"
 #include <iostream>
 
-#include "parallelogram.h"
+#include "semicircleWithCross.h"
 
 int main()
 {
@@ -17,10 +17,13 @@ int main()
 	rectangle hat(point(0, 0), point(14, 5));
 	line brim(point(0, 15), 17);
 	myshape face(point(15, 10), point(27, 18));
-	// h_circle beard(point(40, 10), point(50, 20));
 
-	parallelogram p(point(70, 20), point(100, 30), 20),
-		p2(point(20, 30), point(30, 40), 5), p3(point(30, 30), point(40, 40), 5);
+	semicircleWithCross s(point(100, 30), 15);
+	rectangle r2(point(85, 30), point(115, 45));
+
+	h_circle k(point(30, 20), point(50, 40));
+	rectangle r(point(30, 20), point(50, 40));
+	// h_circle beard(point(40, 10), point(50, 20));
 
 	shape_refresh();
 	std::cout << "=== Generated... ===\n";
@@ -32,9 +35,8 @@ int main()
 	face.resize(2);
 	// beard.flip_vertically();
 
-	p.flip_horisontally();
-	p2.rotate_left();
-	p3.rotate_right();
+	s.flip_horisontally();
+	//r.rotate_left();
 
 	shape_refresh();
 
@@ -47,9 +49,7 @@ int main()
 	up(hat, brim);
 	// down(beard, face);
 
-	up(p, hat);
-	lowerLeft(p2, face);
-	lowerRight(p3, face);
+
 
 	// p.rotate_left();
 
