@@ -1,6 +1,6 @@
 #include "treeNode.h"
 
-treeNode::treeNode(int a_value, treeNode* a_left, treeNode* a_right)
+treeNode::treeNode(const String& a_value, treeNode* a_left, treeNode* a_right)
 	: m_value(a_value), m_left(a_left), m_right(a_right) {}
 
 treeNode::~treeNode()
@@ -16,12 +16,12 @@ treeNode::~treeNode()
 	}
 }
 
-int treeNode::value()
+String treeNode::value()
 {
 	return m_value;
 }
 
-void treeNode::setValue(const int& a_value)
+void treeNode::setValue(const String& a_value)
 {
 	m_value = a_value;
 }

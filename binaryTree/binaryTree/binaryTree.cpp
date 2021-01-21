@@ -8,10 +8,10 @@ binaryTree::~binaryTree()
 	{
 		m_root->~treeNode();
 	}
-	delete m_root;
+	m_root = nullptr;
 }
 
-void binaryTree::insert(int key)
+void binaryTree::insert(String key)
 {
 	if (m_root)
 	{
@@ -23,12 +23,12 @@ void binaryTree::insert(int key)
 	}
 }
 
-treeNode* binaryTree::search(int key)
+treeNode* binaryTree::search(String key)
 {
 	return search(key, m_root);
 }
 
-void binaryTree::remove(int key)
+void binaryTree::remove(String key)
 {
 	remove(key, m_root);
 }
@@ -55,7 +55,7 @@ void binaryTree::preorder(const Function& f)
 	preorder(f, m_root);
 }
 
-void binaryTree::insert(int key, treeNode* leaf)
+void binaryTree::insert(String key, treeNode* leaf)
 {
 	if (key < leaf->value())
 	{
@@ -80,7 +80,7 @@ void binaryTree::insert(int key, treeNode* leaf)
 	}
 }
 
-treeNode* binaryTree::search(int key, treeNode* leaf)
+treeNode* binaryTree::search(String key, treeNode* leaf)
 {
 	if (leaf)
 	{
@@ -103,7 +103,7 @@ treeNode* binaryTree::search(int key, treeNode* leaf)
 	}
 }
 
-treeNode* binaryTree::remove(int key, treeNode* leaf)
+treeNode* binaryTree::remove(String key, treeNode* leaf)
 {
 	treeNode* temp;
 	if (!leaf)
@@ -135,6 +135,8 @@ treeNode* binaryTree::remove(int key, treeNode* leaf)
 		{
 			leaf = leaf->left();
 		}
+		temp->set_left(nullptr);
+		temp->set_right(nullptr);
 		delete temp;
 	}
 

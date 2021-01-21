@@ -8,17 +8,15 @@ int main()
 {
 	binaryTree* tree = new binaryTree();
 
-	tree->insert(10);
-	tree->insert(6);
-	tree->insert(14);
-	tree->insert(5);
-	tree->insert(8);
-	tree->insert(11);
-	tree->insert(18);
+	tree->insert("c");
+	tree->insert("d");
+	tree->insert("e");
+	tree->insert("a");
+	tree->insert("b");
 
-	std::function<int(const int&)> f = [](const int& v) -> int
+	std::function<String(const String&)> f = [](const String& v) -> String
 	{
-		cout << v << ' ';
+		v.print();
 		return v;
 	};
 
@@ -29,8 +27,9 @@ int main()
 	tree->postorder(f);
 	cout << '\n';
 
-	tree->remove(8);
+	tree->remove("c");
 
+	cout << "remove c:\n";
 	tree->preorder(f);
 	cout << '\n';
 	tree->inorder(f);
@@ -38,8 +37,9 @@ int main()
 	tree->postorder(f);
 	cout << '\n';
 
-	tree->remove(14);
-
+	tree->remove("a");
+	
+	cout << "remove a:\n";
 	tree->preorder(f);
 	cout << '\n';
 	tree->inorder(f);
@@ -47,8 +47,9 @@ int main()
 	tree->postorder(f);
 	cout << '\n';
 
-	tree->remove(6);
+	tree->remove("d");
 
+	cout << "remove d:\n";
 	tree->preorder(f);
 	cout << '\n';
 	tree->inorder(f);

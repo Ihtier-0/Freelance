@@ -43,7 +43,6 @@ public:
 	void clear()
 	{
 		this->~templatedBinaryTree();
-		delete m_root;
 		m_root = nullptr;
 	}
 
@@ -140,6 +139,8 @@ private:
 			{
 				leaf = leaf->left();
 			}
+			temp->set_left(nullptr);
+			temp->set_right(nullptr);
 			delete temp;
 		}
 

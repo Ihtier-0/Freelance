@@ -18,10 +18,8 @@ public:
 		{
 			m_right->~TemplatedTreeNode<T>();
 		}
-
-		m_value.~T();
 	}
-	int value()
+	T value()
 	{
 		return m_value;
 	}

@@ -21,6 +21,8 @@ void Viewport::resizeGL(qint32 width, qint32 height)
     QOpenGLFunctions *currentContext = QOpenGLContext::currentContext()->functions();
 
     currentContext->glViewport(0, 0, width, height);
+
+    m_camera->setSize(width, height);
 }
 
 void Viewport::paintGL()
@@ -55,6 +57,46 @@ void Viewport::wheelEvent(QWheelEvent *event)
     }
 
     this->update();
+}
+
+void Viewport::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+    case Qt::Key::Key_W:
+        m_camera->transferring(QVector3D(0, -m_NormalTransferSpeed, 0));
+        break;
+    case Qt::Key::Key_S:
+        m_camera->transferring(QVector3D(0, m_NormalTransferSpeed, 0));
+        break;
+    case Qt::Key::Key_A:
+        m_camera->transferring(QVector3D(m_NormalTransferSpeed, 0, 0));
+        break;
+    case Qt::Key::Key_D:
+        m_camera->transferring(QVector3D(-m_NormalTransferSpeed, 0, 0));
+        break;
+
+    case Qt::Key::Key_E:
+        m_camera->rotation(-m_NormalRotateSpeed);
+        break;
+    case Qt::Key::Key_Q:
+        m_camera->rotation(m_NormalRotateSpeed);
+        break;
+    }
+
+    this->update();
+}
+
+void Viewport::animate()
+{
+    quint64 size = m_objectsToDraw.size();
+
+    for(quint64 i = 0; i < size; ++i)
+    {
+        m_objectsToDraw[i]->animate();
+    }
+
+    update();
 }
 
 void Viewport::addObject(ObjectToDraw *objectToDraw)
