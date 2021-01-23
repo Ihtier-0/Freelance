@@ -2,6 +2,7 @@
 #include <iostream>
 #include <functional>
 #include <string>
+#include <windows.h>
 
 using namespace std;
 
@@ -67,50 +68,54 @@ void print(const map<key, value>& m)
 
 	while (it_m != m.end())
 	{
-		cout << "book name: " << it_m->first << ", circulation: " << it_m->second << "\n";
+		cout << "Название книги: " << it_m->first << ", тираж: " << it_m->second << "\n";
 		it_m++;
 	}
 }
 
 int main()
 {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	setlocale(LC_ALL, "Russian");
+
 	map<string, unsigned int> m;
 
-	m["Loving"] = 400;
-	m["Lolita"] = 500000;
-	m["Brave new world"] = 4000;
-	m["1984"] = 5000;
-	m["Invisible man"] = 300;
-	m["Scoop"] = 40;
-	m["The Magus"] = 5;
+	m["Десять негритят"] = 400;
+	m["Лолита"] = 500000;
+	m["Гарри Поттер"] = 4000;
+	m["Маленький принц"] = 5000;
+	m["Дон Кихот"] = 300;
+	m["Красная книга"] = 40;
+	m["Библия"] = 5;
 
-	cout << "Map:\n";
+	cout << "Книги:\n";
 	print(m);
 
 	string name;
 	unsigned int circulation;
-	cout << "enter book name: ";
+	cout << "Введите название книги: ";
 	getline(cin, name);
 
 	if (find_value<string, unsigned int>(m, name, circulation))
 	{
-		cout << "circulation this book: " << circulation << '\n';
+		cout << "Тираж этой книги: " << circulation << '\n';
 	}
 	else
 	{
-		cout << "Not Found!\n";
+		cout << "Такой книги нет!\n";
 	}
 
-	cout << "enter book circulation: ";
+	cout << "Введите тираж книги: ";
 	cin >> circulation;
 
 	if (find_key<string, unsigned int>(m, circulation, name))
 	{
-		cout << "name book: " << name << '\n';
+		cout << "Название книги с таким тиражом: " << name << '\n';
 	}
 	else
 	{
-		cout << "Not Found!\n";
+		cout << "Книги с таким тиражом нет!\n";
 	}
 
 	// больше чем 1000 экземпляров
@@ -119,6 +124,6 @@ int main()
 		return x.second > 1000;
 	};
 
-	cout << "filtered map:\n";
+	cout << "Книги у которых больше, чем 1000 экземлпяров:\n";
 	print(filter(m, f));
 }
