@@ -2,6 +2,7 @@
 
 #include <list>
 #include "screen.h"
+#include <iostream>
 
 struct shape { // Виртуальный базовый класс "фигура"
 	static std::list<shape*> shapes;// Список фигур (один на все фигуры!)

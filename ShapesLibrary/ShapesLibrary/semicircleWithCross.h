@@ -26,14 +26,23 @@ protected:
 public:
 	semicircleWithCross(point c, int r, point N = point(0, 1)) : center(c), radius(r), n(N)
 	{
-		/*std::cout << "nw " << nwest().x << ' ' << nwest().y << '\n'
-			<< "n " << north().x << ' ' << north().y << '\n'
-			<< "ne " << neast().x << ' ' << neast().y << '\n'
-			<< "e " << east().x << ' ' << east().y << '\n'
-			<< "se " << seast().x << ' ' << seast().y << '\n'
-			<< "s " << south().x << ' ' << south().y << '\n'
-			<< "sw " << swest().x << ' ' << swest().y << '\n'
-			<< "w " << west().x << ' ' << west().y << '\n';*/
+		try
+		{
+			if (r < 0)
+			{
+				throw incorrectInitializationOfTheFigureError("Incorrect Initialization semicircleWithCross");
+			}
+
+			if (!(N.x + N.y == abs(N.x - N.y) && N.x + N.y == 1) && !(N.x + N.y == -abs(N.x - N.y) && N.x + N.y == -1))
+			{
+				throw incorrectInitializationOfTheFigureError("Incorrect Initialization semicircleWithCross");
+			}
+		}
+		catch (const incorrectInitializationOfTheFigureError& e)
+		{
+			std::cout << e.what() << '\n';
+			std::cin.get();
+		}
 	}
 	point north() const 	//Точки для привязки
 	{
@@ -222,80 +231,83 @@ public:
 
 	void draw()		//Рисование
 	{
-		std::cout << "nw " << nwest().x << ' ' << nwest().y << '\n'
-			<< "n " << north().x << ' ' << north().y << '\n'
-			<< "ne " << neast().x << ' ' << neast().y << '\n'
-			<< "e " << east().x << ' ' << east().y << '\n'
-			<< "se " << seast().x << ' ' << seast().y << '\n'
-			<< "s " << south().x << ' ' << south().y << '\n'
-			<< "sw " << swest().x << ' ' << swest().y << '\n'
-			<< "w " << west().x << ' ' << west().y << '\n'
-			<< "normal " << n.x << ' ' << n.y << '\n'
-			<< "center " << center.x << ' ' << center.y << '\n';
-
-		put_line(west(), east());
-		put_line(south(), north());
-
-		put_point(west());
-		put_point(east());
-		put_point(south());
-		put_point(north());
-
-		int x0 = center.x, y0 = seast().y;
-
-		if (n.x == 0 && n.y == 1)
+		try
 		{
-			y0 = seast().y;
-		}
-		else if (n.x == 0 && n.y == -1)
-		{
-			y0 = nwest().y;
-		}
-		else if (n.x == 1 && n.y == 0)
-		{
-			y0 = nwest().y;
-		}
-		else if (n.x == -1 && n.y == 0)
-		{
-			y0 = seast().y;
-		}
+			put_line(west(), east());
+			put_line(south(), north());
 
-		int x = 0, y = radius, delta = 2 - 2 * radius, error = 0;
-		while (y >= 0) //Цикл рисования
-		{
+			int x0 = center.x, y0 = seast().y;
+
 			if (n.x == 0 && n.y == 1)
 			{
-				put_point(x0 + x, y0 + y * 0.7);
-				put_point(x0 - x, y0 + y * 0.7);
+				y0 = seast().y;
 			}
-			else
+			else if (n.x == 0 && n.y == -1)
 			{
-				put_point(x0 + x, y0 - y * 0.7);
-				put_point(x0 - x, y0 - y * 0.7);
+				y0 = nwest().y;
 			}
-
-			error = 2 * (delta + y) - 1;
-
-			if (delta < 0 && error <= 0)
+			// TO DO
+			else if (n.x == 1 && n.y == 0)
 			{
-				++x;
-				delta += 2 * x + 1;
-				continue;
+				y0 = west().y;
 			}
-
-			error = 2 * (delta - x) - 1;
-
-			if (delta > 0 && error > 0)
+			else if (n.x == -1 && n.y == 0)
 			{
-				--y;
-				delta += 1 - 2 * y;
-				continue;
+				y0 = east().y;
 			}
 
-			++x; delta += 2 * (x - y);  --y;
+			int x = 0, y = radius, delta = 2 - 2 * radius, error = 0;
+			while (y >= 0) //Цикл рисования
+			{
+				if (n.x == 0 && n.y == 1)
+				{
+					put_point(x0 + x, y0 + y * 0.7);
+					put_point(x0 - x, y0 + y * 0.7);
+				}
+				else if (n.x == 0 && n.y == -1)
+				{
+					put_point(x0 + x, y0 - y * 0.7);
+					put_point(x0 - x, y0 - y * 0.7);
+				}
+				// TODO
+				else if (n.x == 1 && n.y == 0)
+				{
+					put_point(x0 + x, y0 + y * 0.7);
+					put_point(x0 + x, y0 - y * 0.7);
+				}
+				else if (n.x == -1 && n.y == 0)
+				{
+					put_point(x0 - x, y0 + y * 0.7);
+					put_point(x0 - x, y0 - y * 0.7);
+				}
+
+				error = 2 * (delta + y) - 1;
+
+				if (delta < 0 && error <= 0)
+				{
+					++x;
+					delta += 2 * x + 1;
+					continue;
+				}
+
+				error = 2 * (delta - x) - 1;
+
+				if (delta > 0 && error > 0)
+				{
+					--y;
+					delta += 1 - 2 * y;
+					continue;
+				}
+
+				++x; delta += 2 * (x - y);  --y;
+			}
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << e.what() << " semicircleWithCross::draw\n";
+			std::cin.get();
 		}
 	}
-
 	void move(int a, int b)	//Перемещение
 	{
 		center.x += a;
@@ -321,8 +333,6 @@ public:
 	{
 		n = point(cos(M_PI_2) * n.x - sin(M_PI_2) * n.y,
 			sin(M_PI_2) * n.x + cos(M_PI_2) * n.y);
-
-		std::cout << "n " << n.x << ' ' << n.y << '\n';
 	}
 
 	void rotate_right()	//Повернуть вправо
@@ -331,3 +341,17 @@ public:
 			sin(-M_PI_2) * n.x + cos(-M_PI_2) * n.y);
 	}
 };
+
+void left(shape& p, const shape& q)
+{
+	point n = q.east();
+	point s = p.west();
+	p.move(n.x - s.x, n.y - s.y);
+}
+
+void right(shape& p, const shape& q)
+{
+	point n = q.west();
+	point s = p.east();
+	p.move(n.x - s.x, n.y - s.y);
+}

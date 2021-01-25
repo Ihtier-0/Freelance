@@ -1,6 +1,7 @@
 #pragma once
 
 #include "rotatable.h"
+#include "incorrectInitializationOfTheFigureError.h"
 
 class rectangle : public rotatable
 {
@@ -14,7 +15,22 @@ class rectangle : public rotatable
 protected:
 	point sw, ne;
 public:
-	rectangle(point a, point b) : sw(a), ne(b) { }
+	rectangle(point a, point b) : sw(a), ne(b)
+	{
+		try
+		{
+			if (sw.x > ne.x || sw.y > ne.y)
+			{
+				throw incorrectInitializationOfTheFigureError("Incorrect Initialization rectangle");
+			}
+		}
+		catch (const incorrectInitializationOfTheFigureError& e)
+		{
+			std::cout << e.what() << '\n';
+			std::cin.get();
+		}
+	}
+
 	point north() const { return point((sw.x + ne.x) / 2, ne.y); }
 	point south() const { return point((sw.x + ne.x) / 2, sw.y); }
 	point east() const { return point(ne.x, (sw.y + ne.y) / 2); }
@@ -43,8 +59,17 @@ public:
 	}
 	void draw()
 	{
-		put_line(nwest(), ne);   put_line(ne, seast());
-		put_line(seast(), sw);   put_line(sw, nwest());
+		try
+		{
+			put_line(nwest(), ne);   put_line(ne, seast());
+			put_line(seast(), sw);   put_line(sw, nwest());
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << e.what() << " rectangle::draw\n";
+			std::cin.get();
+		}
+
 	}
 };
 

@@ -18,12 +18,7 @@ int main()
 	line brim(point(0, 15), 17);
 	myshape face(point(15, 10), point(27, 18));
 
-	semicircleWithCross s(point(100, 30), 15);
-	rectangle r2(point(85, 30), point(115, 45));
-
-	h_circle k(point(30, 20), point(50, 40));
-	rectangle r(point(30, 20), point(50, 40));
-	// h_circle beard(point(40, 10), point(50, 20));
+	semicircleWithCross s1(point(40, 30), 5), s2(point(70, 30), 5), s3(point(100, 30), 5);
 
 	shape_refresh();
 	std::cout << "=== Generated... ===\n";
@@ -33,10 +28,10 @@ int main()
 	hat.rotate_right();
 	brim.resize(2);
 	face.resize(2);
-	// beard.flip_vertically();
 
-	s.flip_horisontally();
-	//r.rotate_left();
+	s1.flip_vertically();
+	s2.rotate_left();
+	s3.rotate_right();
 
 	shape_refresh();
 
@@ -44,14 +39,11 @@ int main()
 	std::cin.get(); //Смотреть результат поворотов/отражений
 
 	//== 3.Сборка изображения ==
-	//	face.move(0, -10); // Лицо - в исходное положение
 	up(brim, face);
 	up(hat, brim);
-	// down(beard, face);
-
-
-
-	// p.rotate_left();
+	down(s1, face);
+	left(s3, brim);
+	right(s2, brim);
 
 	shape_refresh();
 	std::cout << "=== Ready! ===\n";

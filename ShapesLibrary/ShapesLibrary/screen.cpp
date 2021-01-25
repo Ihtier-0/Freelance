@@ -2,6 +2,8 @@
 #include <iostream>
 #include "screen.h"
 
+#include "incorrectInitializationOfTheFigureError.h"
+
 //==1. Поддержка экрана в форме матрицы символов ==
 char screen[YMAX][XMAX];
 
@@ -29,6 +31,10 @@ void put_point(int a, int b)
     if (on_screen(a, b))
     {
         screen[b][a] = black;
+    }
+    else
+    {
+        throw incorrectInitializationOfTheFigureError("trying to put a point off the screen: ");
     }
 }
 

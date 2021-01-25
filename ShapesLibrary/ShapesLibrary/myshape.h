@@ -28,10 +28,19 @@ myshape::myshape(point a, point b)
 
 void myshape::draw()
 {
-	rectangle::draw(); //Контур лица (глаза и нос рисуются сами!) 
-	int a = (swest().x + neast().x) / 2;
-	int b = (swest().y + neast().y) / 2;
-	put_point(point(a, b)); // Нос – существует только на рисунке!
+	try
+	{
+		rectangle::draw(); //Контур лица (глаза и нос рисуются сами!) 
+		int a = (swest().x + neast().x) / 2;
+		int b = (swest().y + neast().y) / 2;
+		put_point(point(a, b)); // Нос – существует только на рисунке!
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << " myshape::draw\n";
+		std::cin.get();
+	}
+
 }
 
 void myshape::move(int a, int b)

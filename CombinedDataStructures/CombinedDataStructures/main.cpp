@@ -360,14 +360,15 @@ int main()
 
 	A.Show();
 	B.Show();
-	std::cout << "\nA xor B";
-	((A | B) - (A & B)).Show();
-	std::cout << "\nA xor B & C";
-	(((A | B) - (A & B)) & C).Show();
-	std::cout << "\nA xor B & C | D";
-	(((A | B) - (A & B)) & C | D | E).Show();
-	std::cout << "\nA xor B & C | D | E";
-	(((A | B) - (A & B)) & C | D | E).Show();
+
+	std::cout << "\nA & B";
+	(A & B).Show();
+	std::cout << "\nA & B xor C";
+	(((A & B) | C) - ((A & B) & C)).Show();
+	std::cout << "\nA & B xor C & D";
+	((((A & B) | C) - ((A & B) & C)) & D).Show();
+	std::cout << "\nA & B xor C & D & E";
+	((((A & B) | C) - ((A & B) & C)) & D & E).Show();
 
 	//int q_and(rand(MaxMul) + 1);
 	//PrepareAnd(A, R, q_and);
