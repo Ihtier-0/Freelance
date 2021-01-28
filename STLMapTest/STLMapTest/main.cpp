@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 #include <windows.h>
+#include <queue>
 
 using namespace std;
 
@@ -27,16 +28,12 @@ bool find_value(const map<key, value>& m, const value& v, key& result)
 template<class key, class value>
 bool find_key(const map<key, value>& m, const key& k, value& result)
 {
-	auto it_m = m.begin();
+	auto it_m = m.find(k);
 
-	while (it_m != m.end())
+	if (it_m != m.end())
 	{
-		if (it_m->first == k)
-		{
-			result = it_m->second;
-			return true;
-		}
-		it_m++;
+		result = it_m->second;
+		return true;
 	}
 
 	return false;
@@ -310,15 +307,27 @@ public:
 	{
 		return b1.m_bookTitle < b2.m_bookTitle;
 	}
-
+	friend bool operator<=(const book& b1, const book& b2)
+	{
+		return b1.m_bookTitle <= b2.m_bookTitle;
+	}
 	friend bool operator>(const book& b1, const book& b2)
 	{
 		return b1.m_bookTitle > b2.m_bookTitle;
+	}
+	friend bool operator>=(const book& b1, const book& b2)
+	{
+		return b1.m_bookTitle >= b2.m_bookTitle;
 	}
 
 	friend bool operator==(const book& b1, const book& b2)
 	{
 		return b1.m_bookTitle == b2.m_bookTitle;
+	}
+
+	friend bool operator!=(const book& b1, const book& b2)
+	{
+		return b1.m_bookTitle != b2.m_bookTitle;
 	}
 
 private:
@@ -375,9 +384,21 @@ private:
 	int size;
 public:
 	// TODO
-	NodeHeap<T>* ExtractMax()
+	NodeHeap<T> ExtractMax()
 	{
+		if (len != 0)
+		{
+			NodeHeap<T> result = arr[0];
 
+			for (int i = 1; i < len; ++i)
+			{
+				arr[i - 1] = arr[i];
+			}
+
+			len--;
+
+			return result;
+		}
 	}
 	//доступ к вспомогательным полям кучи и оператор индекса
 	int getCapacity() { return size; }
@@ -513,13 +534,25 @@ public:
 	void InOrder(void(*f)(NodeHeap<T>*), int index = 0)
 	{
 		if (GetLeftChildIndex(index) < len)
-			PreOrder(f, GetLeftChildIndex(index));
+			InOrder(f, GetLeftChildIndex(index));
 		if (index >= 0 && index < len)
 			f(&arr[index]);
 		if (GetRightChildIndex(index) < len)
-			PreOrder(f, GetRightChildIndex(index));
+			InOrder(f, GetRightChildIndex(index));
 	}
 };
+
+template<typename T>
+void print_queue(T& q)
+{
+	while (!q.empty())
+	{
+		cout << q.top() << '\n';
+		q.pop();
+	}
+	std::cout << '\n';
+}
+
 
 
 int main()
@@ -528,7 +561,7 @@ int main()
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "Russian");
 
-	cout << "Задание 2.1\n";
+	cout << "Задание 2.1\n\n";
 
 	map<string, unsigned int> m;
 
@@ -578,8 +611,19 @@ int main()
 	cout << "Книги у которых больше, чем 1000 экземлпяров:\n";
 	print(filter(m, f));
 
-	cout << "Задание 2.2\n";
+	cout << "\nЗадание 2.2\n\n";
 
+	std::priority_queue<book> q;
+
+	q.push(book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
+	q.push(book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
+	q.push(book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	q.push(book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
+	q.push(book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
+	q.push(book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	
+	print_queue(q);
+	
 	cout << "Задание 2.3\n";
 
 	Tree<book> t;
@@ -596,20 +640,22 @@ int main()
 			cout << *x;
 		});
 
-	cout << "\nЗадание 2.4\n";
+	cout << "\n\nЗадание 2.4\n\n";
 
-	Heap<int> Tree;
-	Tree.Add(1);
-	Tree.Add(-1);
-	Tree.Add(-2);
-	Tree.Add(2);
-	Tree.Add(5);
-	Tree.Add(6);
-	Tree.Add(-3);
-	Tree.Add(-4);
-	Tree.Add(4);
-	Tree.Add(3);
-	cout << "\n-----\nStraight:";
-	void(*f_ptr)(NodeHeap<int>*); f_ptr = print;
-	Tree.Straight(f_ptr);
+	Heap<book> Tree;
+	Tree.Add(book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
+	Tree.Add(book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
+	Tree.Add(book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	Tree.Add(book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
+	Tree.Add(book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
+	Tree.Add(book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+
+	/*void(*f_ptr)(NodeHeap<book>*); f_ptr = print;
+	Tree.InOrder(f_ptr);*/
+
+	while (Tree.getCount())
+	{
+		Tree.ExtractMax().print();
+		cout << '\n';
+	}
 }

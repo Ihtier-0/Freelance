@@ -280,20 +280,23 @@ class ListIterator : public std::iterator<std::input_iterator_tag, ValueType>
 private:
 public:
 	ListIterator() { ptr = NULL; }
-	//ListIterator(ValueType* p) { ptr = p; }
+	
 	ListIterator(Element<ValueType>* p) { ptr = p; }
 	ListIterator(const ListIterator& it) { ptr = it.ptr; }
 	bool operator!=(ListIterator const& other) const { return ptr != other.ptr; }
 	bool operator==(ListIterator const& other) const
 	{
 		return ptr == other.ptr;
-	}//need for BOOST_FOREACH
+	}
 	Element<ValueType>& operator*()
 	{
 		return *ptr;
 	}
+	operator bool() { return ptr; }
 	ListIterator& operator++() { ptr = ptr->getNext(); return *this; }
 	ListIterator& operator++(int v) { ptr = ptr->getNext(); return *this; }
+	ListIterator& operator--() { ptr = ptr->getPrevious(); return *this; }
+	ListIterator& operator--(int v) { ptr = ptr->getPrevious(); return *this; }
 	ListIterator& operator=(const ListIterator& it) { ptr = it.ptr; return *this; }
 	ListIterator& operator=(Element<ValueType>* p) { ptr = p; return *this; }
 private:
@@ -309,7 +312,7 @@ public:
 		cout << "\nIteratedLinkedList constructor\n";
 	}
 	virtual ~IteratedLinkedList() { cout << "\nIteratedLinkedList destructor\n"; }
-	ListIterator<T> iterator;
+
 	ListIterator<T> begin()
 	{
 		ListIterator<T> it = LinkedListParent<T>::head; return it;
@@ -489,15 +492,10 @@ void print(IteratedLinkedList<T> &l)
 {
 	ListIterator<T> b = l.begin();
 
-	while (b != l.end())
+	while (b)
 	{
 		cout << *b << '\n';
 		++b;
-	}
-
-	if (b != ListIterator<T>())
-	{
-		cout << *b << ' ';
 	}
 }
 

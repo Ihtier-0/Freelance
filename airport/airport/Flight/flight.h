@@ -14,6 +14,15 @@ public:
            const QDateTime& a_departureTime,
            const QDateTime& a_arrivalTime,
            const qint64& a_numberFreeSeatsInCabin);
+
+    qint64 flightNumber() const;
+    QString destination() const;
+    QDateTime departureTime() const;
+    QDateTime arrivalTime() const;
+    qint64 numberFreeSeatsInCabin() const;
+
+    QString toQString();
+
 private:
     // номер рейса
     qint64 m_flightNumber;
@@ -25,6 +34,9 @@ private:
     QDateTime m_arrivalTime;
     // количество свободных мест в салоне
     qint64 m_numberFreeSeatsInCabin;
+
+    friend bool operator==(const Flight& left, const Flight& right);
+    friend bool operator!=(const Flight& left, const Flight& right);
 };
 
 #endif // FLIGHT_H
