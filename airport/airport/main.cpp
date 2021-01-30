@@ -2,12 +2,14 @@
 #include <QApplication>
 #include <QDateTime>
 #include <iostream>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    airportTable t("db");
-    MainWindow w(&t);
+    std::cout << (QDir::currentPath() + "/db").toStdString() << '\n';
+    airportTable *t  = new airportTable(QDir::currentPath() + "/db");
+    MainWindow w(t);
 
 //    Flight tmp1(1, "USA", QDateTime(QDate(2000, 7, 1), QTime(10, 30)), QDateTime(QDate(2000, 7, 2), QTime(10, 30)), 9);
 //    Flight tmp2(2, "China", QDateTime(QDate(2000, 7, 6), QTime(20, 30)), QDateTime(QDate(2000, 7, 7), QTime(10, 30)), 100);
@@ -20,7 +22,7 @@ int main(int argc, char *argv[])
 //    Flight tmp10(50, "USA", QDateTime(QDate(2000, 7, 25), QTime(2, 30)), QDateTime(QDate(2000, 7, 26), QTime(10, 30)), 9);
 
 //    const QString tmpFileName = "db";
-//    std::ofstream tmpFile(tmpFileName.toStdString());
+//    std::ofstream tmpFile(tmpFileName.toStdString().c_str());
 
 //    tmpFile.write((char*)&tmp1,sizeof(Flight));
 //    tmpFile.write((char*)&tmp2,sizeof(Flight));
@@ -34,22 +36,16 @@ int main(int argc, char *argv[])
 
 //    tmpFile.close();
 
-//    std::ifstream tmpFilei(tmpFileName.toStdString());
+//    binaryAirportDB b("db");
 
-//    if(tmpFilei.is_open())
+//    std::cout << '\n';
+//    for (qint64 i = 0; i < b.size(); ++i)
 //    {
-//        qDebug() << "open";
+//        std::cout << b[i] << '\n';
 //    }
-
-//    Flight tmp;
-
-//    while(tmpFilei.read((char*)&tmp,sizeof(Flight)))
-//    {
-//        qDebug() << tmp.toQString() << '\n';
-//    }
-
-//    qDebug() << "end";
 
     w.show();
     return a.exec();
+
+    delete t;
 }

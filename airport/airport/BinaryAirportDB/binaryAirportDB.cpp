@@ -6,16 +6,16 @@ binaryAirportDB::binaryAirportDB(const QString& a_dbFileName): m_dbFileName(a_db
 {
     std::fstream openTest(m_dbFileName.toStdString());
 
-      m_size = 0;
+    m_size = 0;
 
-     Flight tmp;
+    Flight tmp;
 
-    while(openTest.read((char*)&tmp,sizeof(tmp)))
+    while (!openTest.eof())
     {
-          ++m_size;
+        openTest.read((char*)&tmp, sizeof(Flight));
+        std::cout << tmp << '\n';
+        ++m_size;
     }
-
-    openTest.clear();
     openTest.close();
 }
 
@@ -23,114 +23,148 @@ void binaryAirportDB::add(const Flight &f)
 {
     std::ofstream out(m_dbFileName.toStdString(), std::ios::app);
 
-    out.write((char*)&f,sizeof(f));
+    out.write((char*)&f, sizeof(Flight));
 
     ++m_size;
 }
 
-void binaryAirportDB::erase(const Flight &f)
+void binaryAirportDB::addByIndex(const Flight &f, const qint64 &index)
 {
-
-    Flight tmp;
-
-    std::fstream in(m_dbFileName.toStdString());
-
-    const QString tmpFileName = "tmpFile";
-    std::fstream tmpFile(tmpFileName.toStdString());
-
-    while(!in.eof())
+    if (index >= m_size || index < 0)
     {
-        in.read((char*)&tmp,sizeof(tmp));
-
-        if(tmp == f)
-        {
-            continue;
-            --m_size;
-        }
-
-        tmpFile.write((char*)&tmp,sizeof(tmp));
+        throw std::exception("out of range!");
     }
 
-    QFile::remove(m_dbFileName);
-    QFile::rename(tmpFileName, m_dbFileName);
-}
-
-void binaryAirportDB::erase(const qint64 &index)
-{
-    qint64 i = -1;
+    int i = -1;
 
     Flight tmp;
 
     std::fstream in(m_dbFileName.toStdString());
 
-    const QString tmpFileName = "tmpFile";
-    std::fstream tmpFile(tmpFileName.toStdString());
+    const std::string tmpFileName = "tmpFile";
+    std::ofstream tmpFile(tmpFileName);
 
-    while(!in.eof())
+    while (!in.eof())
     {
-        in.read((char*)&tmp,sizeof(tmp));
+        in.read((char*)&tmp, sizeof(Flight));
+
         ++i;
 
-        if(i == index)
+        if (i == index)
         {
-            continue;
-            --m_size;
+            tmpFile.write((char*)&f, sizeof(f));
         }
 
-        tmpFile.write((char*)&tmp,sizeof(tmp));
+        tmpFile.write((char*)&tmp, sizeof(tmp));
     }
 
-    QFile::remove(m_dbFileName);
-    QFile::rename(tmpFileName, m_dbFileName);
+    in.close();
+    tmpFile.close();
+
+    std::remove(m_dbFileName.toStdString().c_str());
+    std::rename(tmpFileName.c_str(), m_dbFileName.toStdString().c_str());
+}
+
+void binaryAirportDB::erase(const Flight &f)
+{
+    Flight tmp;
+    bool E = false;
+
+    std::fstream in(m_dbFileName.toStdString());
+
+    const std::string tmpFileName = "tmpFile";
+    std::ofstream tmpFile(tmpFileName);
+
+    while (!in.eof())
+    {
+        in.read((char*)&tmp, sizeof(Flight));
+
+        if (tmp == f && !E)
+        {
+            --m_size;
+            E = true;
+            continue;
+        }
+
+        tmpFile.write((char*)&tmp, sizeof(tmp));
+    }
+
+    in.close();
+    tmpFile.close();
+
+    std::remove(m_dbFileName.toStdString().c_str());
+    std::rename(tmpFileName.c_str(), m_dbFileName.toStdString().c_str());
+}
+
+void binaryAirportDB::eraseByIndex(const qint64 &index)
+{
+    if (index >= m_size || index < 0)
+    {
+        throw std::exception("out of range!");
+    }
+
+    int i = -1;
+
+    Flight tmp;
+
+    std::fstream in(m_dbFileName.toStdString());
+
+    const std::string tmpFileName = "tmpFile";
+    std::ofstream tmpFile(tmpFileName);
+
+    while (!in.eof())
+    {
+        in.read((char*)&tmp, sizeof(Flight));
+
+        ++i;
+
+        if (i == index)
+        {
+            continue;
+        }
+
+        tmpFile.write((char*)&tmp, sizeof(tmp));
+    }
+
+    in.close();
+    tmpFile.close();
+
+    std::remove(m_dbFileName.toStdString().c_str());
+    std::rename(tmpFileName.c_str(), m_dbFileName.toStdString().c_str());
 }
 
 void binaryAirportDB::replace(const Flight &f, const qint64 &index)
 {
-    qint64 i = -1;
-
-    Flight tmp;
+    if (index >= m_size || index < 0)
+    {
+        throw std::exception("out of range!");
+    }
 
     std::fstream in(m_dbFileName.toStdString());
 
-    const QString tmpFileName = "tmpFile";
-    std::fstream tmpFile(tmpFileName.toStdString());
+    in.seekg(sizeof(Flight) * index, std::ios::beg);
 
-    while(!in.eof())
-    {
-        in.read((char*)&tmp,sizeof(tmp));
-        ++i;
 
-        if(i == index)
-        {
-            tmpFile.write((char*)&f,sizeof(f));
-        }
-        else
-        {
-            tmpFile.write((char*)&tmp,sizeof(tmp));
-        }
-    }
-
-    QFile::remove(m_dbFileName);
-    QFile::rename(tmpFileName, m_dbFileName);
+    in.write((char*)&f, sizeof(Flight));
 }
 
-quint64 binaryAirportDB::size()
+qint64 binaryAirportDB::size()
 {
     return m_size;
 }
 
-Flight binaryAirportDB::operator[](const quint64 &index)
+Flight binaryAirportDB::operator[](const qint64 &index)
 {
-    if(index >= m_size)
+    if (index >= m_size || index < 0)
     {
         throw std::exception("out of range!");
     }
 
     std::fstream in(m_dbFileName.toStdString());
     Flight tmp;
-    in.seekg(sizeof(tmp) * index, std::ios::beg);
+    in.seekg(sizeof(tmp) * static_cast<unsigned int>(index), std::ios::beg);
 
-    in.read((char*)&tmp,sizeof(tmp));
+    in.read((char*)&tmp, sizeof(Flight));
 
     return tmp;
 }

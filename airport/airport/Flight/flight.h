@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QString>
+#include <iostream>
 
 // класс хранящий информацию о рейсе
 class Flight
@@ -22,7 +23,15 @@ public:
     qint64 numberFreeSeatsInCabin() const;
 
     QString toQString();
+    friend std::ostream& operator<<(std::ostream& out, const Flight& f)
+    {
+        out << f.m_flightNumber << ' ' << f.m_destination.toStdString()
+            << ' ' << f.m_departureTime.toString().toStdString()
+            << ' ' << f.m_arrivalTime.toString().toStdString()
+            << ' ' << f.m_numberFreeSeatsInCabin;
 
+        return out;
+    }
 private:
     // номер рейса
     qint64 m_flightNumber;

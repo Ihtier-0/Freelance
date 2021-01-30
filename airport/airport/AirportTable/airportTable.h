@@ -2,16 +2,15 @@
 #define AIRPORTTABLE_H
 
 #include <QTableWidget>
-
 #include "BinaryAirportDB/binaryAirportDB.h"
 
 class airportTable : public QTableWidget
 {
     Q_OBJECT
 public:
-    airportTable(const QString& a_dbFileName);
+    airportTable(QString a_dbFileName);
 private:
-    binaryAirportDB m_DB;
+    binaryAirportDB m_db;
 };
 
 #endif // AIRPORTTABLE_H

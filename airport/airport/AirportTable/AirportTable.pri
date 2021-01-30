@@ -8,4 +8,5 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/airportTable.cpp
+
 }

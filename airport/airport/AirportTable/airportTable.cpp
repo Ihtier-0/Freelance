@@ -1,30 +1,17 @@
 #include "airportTable.h"
+#include "BinaryAirportDB/binaryAirportDB.h"
 
-//// номер рейса
-//qint64 m_flightNumber;
-//// пункт назначения
-//QString m_destination;
-//// время вылета
-//QDateTime m_departureTime;
-//// время прибытия
-//QDateTime m_arrivalTime;
-//// количество свободных мест в салоне
-//qint64 m_numberFreeSeatsInCabin;
-
-airportTable::airportTable(const QString &a_dbFileName) : m_DB(a_dbFileName)
+airportTable::airportTable(QString a_dbFileName) : m_db(a_dbFileName)
 {
-    quint64 size = m_DB.size();
-
-    this->setRowCount(size);
     this->setColumnCount(5);
-
+    this->setRowCount(m_db.size());
     this->setHorizontalHeaderLabels(QStringList() << "flight number" << "destination"
-                                                    << "departureTime" << "arrival time"
-                                                    << "number free seats in cabin");
+                                                        << "departureTime" << "arrival time"
+                                                        << "number free seats in cabin");
     Flight tmp;
-    for(quint64 i = 0; i < size; ++i)
+    for(qint64 i = 0; i < m_db.size(); ++i)
     {
-        tmp = m_DB[i];
+        tmp = m_db[i];
 
         this->setItem(i, 0, new QTableWidgetItem(QString::number(tmp.flightNumber())));
         this->setItem(i, 1, new QTableWidgetItem(tmp.destination()));

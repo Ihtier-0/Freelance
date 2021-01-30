@@ -293,10 +293,10 @@ public:
 		return *ptr;
 	}
 	operator bool() { return ptr; }
-	ListIterator& operator++() { ptr = ptr->getNext(); return *this; }
-	ListIterator& operator++(int v) { ptr = ptr->getNext(); return *this; }
-	ListIterator& operator--() { ptr = ptr->getPrevious(); return *this; }
-	ListIterator& operator--(int v) { ptr = ptr->getPrevious(); return *this; }
+	ListIterator& operator++() { if(ptr) ptr = ptr->getNext(); return *this; }
+	ListIterator& operator++(int v) { if (ptr) ptr = ptr->getNext(); return *this; }
+	ListIterator& operator--() { if (ptr) ptr = ptr->getPrevious(); return *this; }
+	ListIterator& operator--(int v) { if (ptr) ptr = ptr->getPrevious(); return *this; }
 	ListIterator& operator=(const ListIterator& it) { ptr = it.ptr; return *this; }
 	ListIterator& operator=(Element<ValueType>* p) { ptr = p; return *this; }
 private:
