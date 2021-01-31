@@ -1,22 +1,13 @@
 #include "binaryAirportDB.h"
 
 #include <QFile>
+#include <exception>
 
 binaryAirportDB::binaryAirportDB(const QString& a_dbFileName): m_dbFileName(a_dbFileName)
 {
-    std::fstream openTest(m_dbFileName.toStdString());
+    std::ifstream in(m_dbFileName.toStdString(), std::ifstream::ate | std::ifstream::binary);
 
-    m_size = 0;
-
-    Flight tmp;
-
-    while (!openTest.eof())
-    {
-        openTest.read((char*)&tmp, sizeof(Flight));
-        std::cout << tmp << '\n';
-        ++m_size;
-    }
-    openTest.close();
+    m_size = in.tellg() / sizeof(Flight);
 }
 
 void binaryAirportDB::add(const Flight &f)
@@ -32,7 +23,7 @@ void binaryAirportDB::addByIndex(const Flight &f, const qint64 &index)
 {
     if (index >= m_size || index < 0)
     {
-        throw std::exception("out of range!");
+        throw std::exception();
     }
 
     int i = -1;
@@ -100,7 +91,7 @@ void binaryAirportDB::eraseByIndex(const qint64 &index)
 {
     if (index >= m_size || index < 0)
     {
-        throw std::exception("out of range!");
+        throw std::exception();
     }
 
     int i = -1;
@@ -137,7 +128,7 @@ void binaryAirportDB::replace(const Flight &f, const qint64 &index)
 {
     if (index >= m_size || index < 0)
     {
-        throw std::exception("out of range!");
+        throw std::exception();
     }
 
     std::fstream in(m_dbFileName.toStdString());
@@ -157,7 +148,7 @@ Flight binaryAirportDB::operator[](const qint64 &index)
 {
     if (index >= m_size || index < 0)
     {
-        throw std::exception("out of range!");
+        throw std::exception();
     }
 
     std::fstream in(m_dbFileName.toStdString());

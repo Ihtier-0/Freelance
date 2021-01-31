@@ -65,7 +65,7 @@ void print(const map<key, value>& m)
 
 	while (it_m != m.end())
 	{
-		cout << "Название книги: " << it_m->first << ", тираж: " << it_m->second << "\n";
+		cout << "Международный код: " << it_m->first << ", количество обслуживаемых линий: " << it_m->second << "\n";
 		it_m++;
 	}
 }
@@ -244,101 +244,64 @@ public:
 	}
 };
 
-class book
+class Airline
 {
 public:
-	enum typeOfPublication
+	Airline() : m_name(), m_international_code(0), m_number_of_served_lines(0), m_country(), m_internet_site_address(),
+		m_rating_reliability(0) {}
+	Airline(string a_name,
+		int a_international_code,
+		int a_number_of_served_lines,
+		string a_country,
+		string a_internet_site_address,
+		int a_rating_reliability) : m_name(a_name), m_international_code(a_international_code),
+		m_number_of_served_lines(a_number_of_served_lines), m_country(a_country), m_internet_site_address(a_internet_site_address),
+		m_rating_reliability(a_rating_reliability) {}
+
+	friend ostream& operator<<(ostream& out, const Airline& a)
 	{
-		electronic, paper, audio, unknown
-	};
-
-public:
-	book() : m_authorsSurname(), m_authorsName(),
-		m_bookTitle(), m_yearOfPublishing(-1),
-		m_publisherName(), m_numberOfPages(-1),
-		m_type(typeOfPublication::unknown), m_circulation(-1) {}
-
-	book(const string& a_authorsSurname,
-		const string& a_authorsName,
-		const string& a_bookTitle,
-		const int& a_yearOfPublishing,
-		const string& a_publisherName,
-		const int& a_numberOfPages,
-		const typeOfPublication& a_type,
-		const int& a_circulation) : m_authorsName(a_authorsName), m_authorsSurname(a_authorsSurname),
-		m_bookTitle(a_bookTitle), m_yearOfPublishing(a_yearOfPublishing), m_publisherName(a_publisherName),
-		m_numberOfPages(a_numberOfPages), m_type(a_type), m_circulation(a_circulation) {}
-
-	friend ostream& operator<<(ostream& out, const book& b)
-	{
-		out << b.m_authorsSurname << ' ' << b.m_authorsName << ' ' << b.m_bookTitle << ' ' << b.m_yearOfPublishing << ' '
-			<< b.m_publisherName << ' ' << b.m_numberOfPages << ' ';
-
-		switch (b.m_type)
-		{
-		case typeOfPublication::electronic:
-		{
-			out << "electronic";
-			break;
-		}
-		case typeOfPublication::paper:
-		{
-			out << "paper";
-			break;
-		}
-		case typeOfPublication::audio:
-		{
-			out << "audio";
-			break;
-		}
-		case typeOfPublication::unknown:
-		{
-			out << "unknown";
-			break;
-		}
-		}
-
-		out << ' ' << b.m_circulation;
+		out << a.m_name << ' ' << a.m_international_code << ' ' << a.m_number_of_served_lines << ' '
+			<< a.m_country << ' ' << a.m_internet_site_address << ' ' << a.m_rating_reliability;
 
 		return out;
 	}
 
-	friend bool operator<(const book& b1, const book& b2)
+	friend bool operator<(const Airline& left, const Airline& right)
 	{
-		return b1.m_bookTitle < b2.m_bookTitle;
-	}
-	friend bool operator<=(const book& b1, const book& b2)
-	{
-		return b1.m_bookTitle <= b2.m_bookTitle;
-	}
-	friend bool operator>(const book& b1, const book& b2)
-	{
-		return b1.m_bookTitle > b2.m_bookTitle;
-	}
-	friend bool operator>=(const book& b1, const book& b2)
-	{
-		return b1.m_bookTitle >= b2.m_bookTitle;
+		return left.m_rating_reliability < right.m_rating_reliability ||
+			(left.m_rating_reliability == right.m_rating_reliability &&
+				left.m_number_of_served_lines < right.m_number_of_served_lines) ||
+			(left.m_rating_reliability == right.m_rating_reliability &&
+				left.m_number_of_served_lines == right.m_number_of_served_lines &&
+				left.m_name < right.m_name);
 	}
 
-	friend bool operator==(const book& b1, const book& b2)
+	friend bool operator>(const Airline& left, const Airline& right)
 	{
-		return b1.m_bookTitle == b2.m_bookTitle;
+		return left.m_rating_reliability > right.m_rating_reliability ||
+			(left.m_rating_reliability == right.m_rating_reliability &&
+				left.m_number_of_served_lines > right.m_number_of_served_lines) ||
+			(left.m_rating_reliability == right.m_rating_reliability &&
+				left.m_number_of_served_lines == right.m_number_of_served_lines &&
+				left.m_name > right.m_name);
 	}
 
-	friend bool operator!=(const book& b1, const book& b2)
+	friend bool operator==(const Airline& left, const Airline& right)
 	{
-		return b1.m_bookTitle != b2.m_bookTitle;
+		return left.m_name == right.m_name &&
+			left.m_international_code == right.m_international_code &&
+			left.m_number_of_served_lines == right.m_number_of_served_lines &&
+			right.m_country == left.m_country &&
+			left.m_international_code == right.m_international_code && 
+			left.m_rating_reliability == right.m_rating_reliability;
 	}
-
 private:
-	string m_authorsSurname;
-	string m_authorsName;
-	string m_bookTitle;
-	int m_yearOfPublishing;
-	string m_publisherName;
-	int m_numberOfPages;
-	typeOfPublication m_type;
-	int m_circulation;
+	string m_name;
+	int m_international_code;
+	int m_number_of_served_lines;
+	string m_country;
+	string m_internet_site_address;
+	int m_rating_reliability;
 };
 
 template <class T>
@@ -553,8 +516,6 @@ void print_queue(T& q)
 	std::cout << '\n';
 }
 
-
-
 int main()
 {
 	SetConsoleCP(1251);
@@ -563,92 +524,90 @@ int main()
 
 	cout << "Задание 2.1\n\n";
 
-	map<string, unsigned int> m;
+	map<int, int> m;
 
-	m["Десять негритят"] = 400;
-	m["Лолита"] = 500000;
-	m["Гарри Поттер"] = 4000;
-	m["Маленький принц"] = 5000;
-	m["Дон Кихот"] = 300;
-	m["Красная книга"] = 40;
-	m["Библия"] = 5;
+	m[1] = 1;
+	m[2] = 15;
+	m[3] = 6;
+	m[4] = 7;
+	m[5] = 8;
+	m[6] = 40;
+	m[7] = 5;
 
-	cout << "Книги:\n";
+	cout << "Авиакомпании:\n";
 	print(m);
 
-	string name;
-	unsigned int circulation;
-	cout << "Введите название книги: ";
-	getline(cin, name);
+	int code;
+	int lines;
+	cout << "Введите международный код авиакомпании: ";
+	cin >> code;
 
-	if (find_key<string, unsigned int>(m, name, circulation))
+	if (find_key<int, int>(m, code, lines))
 	{
-		cout << "Тираж этой книги: " << circulation << '\n';
+		cout << "Количество обслуживаемых линий: " << lines << '\n';
 	}
 	else
 	{
-		cout << "Такой книги нет!\n";
+		cout << "Такой авиакомпани нет!\n";
 	}
 
-	cout << "Введите тираж книги: ";
-	cin >> circulation;
+	cout << "Введите количество обслуживаемых линий авиакомпании: ";
+	cin >> lines;
 
-	if (find_value<string, unsigned int>(m, circulation, name))
+	if (find_value<int, int>(m, lines, code))
 	{
-		cout << "Название книги с таким тиражом: " << name << '\n';
+		cout << "Международный код авиакомпании с таким количеством линий: " << code << '\n';
 	}
 	else
 	{
-		cout << "Книги с таким тиражом нет!\n";
+		cout << "Такой авиакомпании нет!\n";
 	}
 
-	// больше чем 1000 экземпляров
-	function<bool(pair<string, unsigned int>)> f = [](const pair<string, unsigned int>& x) -> bool
+	function<bool(pair<int, int>)> f = [](const pair<int, int>& x) -> bool
 	{
-		return x.second > 1000;
+		return x.first > 5;
 	};
 
-	cout << "Книги у которых больше, чем 1000 экземлпяров:\n";
+	cout << "Авиакомпании с международным кодом больше 5:\n";
 	print(filter(m, f));
 
 	cout << "\nЗадание 2.2\n\n";
 
-	std::priority_queue<book> q;
-
-	q.push(book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	q.push(book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	q.push(book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
-	q.push(book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	q.push(book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	q.push(book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	std::priority_queue < Airline > q;
+	q.push(Airline("saf", 12, 1, "Россия", "https::/", 10));
+	q.push(Airline("haaah", 13, 8, "США", "https::/", 1));
+	q.push(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+	q.push(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+	q.push(Airline("ahasah", 16, 10, "США", "https::/", -5));
+	q.push(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
 	
 	print_queue(q);
 	
 	cout << "Задание 2.3\n";
 
-	Tree<book> t;
+	Tree<Airline> t;
 	
-	t.Add(book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	t.Add(book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	t.Add(book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
-	t.Add(book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	t.Add(book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	t.Add(book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	t.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
+	t.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
+	t.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+	t.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+	t.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
+	t.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
 
-	t.PreOrder(t.getRoot(), [](Node<book>*x)
+	t.PreOrder(t.getRoot(), [](Node<Airline>*x)
 		{
 			cout << *x;
 		});
 
 	cout << "\n\nЗадание 2.4\n\n";
 
-	Heap<book> Tree;
-	Tree.Add(book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	Tree.Add(book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	Tree.Add(book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
-	Tree.Add(book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	Tree.Add(book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	Tree.Add(book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	Heap<Airline> Tree;
+	Tree.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
+	Tree.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
+	Tree.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+	Tree.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+	Tree.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
+	Tree.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
 
 	/*void(*f_ptr)(NodeHeap<book>*); f_ptr = print;
 	Tree.InOrder(f_ptr);*/

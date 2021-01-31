@@ -75,81 +75,145 @@ void print(const list<T>& lst)
 	}
 }
 
-class book
+class Fraction
 {
+private:
+	int numerator, denominator;
 public:
-	enum typeOfPublication
+	int Numerator() const
 	{
-		electronic, paper, audio, unknown
-	};
-
-public:
-	book() : m_authorsSurname(), m_authorsName(),
-		m_bookTitle(), m_yearOfPublishing(-1),
-		m_publisherName(), m_numberOfPages(-1),
-		m_type(typeOfPublication::unknown), m_circulation(-1) {}
-
-	book(const string& a_authorsSurname,
-		const string& a_authorsName,
-		const string& a_bookTitle,
-		const int& a_yearOfPublishing,
-		const string& a_publisherName,
-		const int& a_numberOfPages,
-		const typeOfPublication& a_type,
-		const int& a_circulation) : m_authorsName(a_authorsName), m_authorsSurname(a_authorsSurname),
-		m_bookTitle(a_bookTitle), m_yearOfPublishing(a_yearOfPublishing), m_publisherName(a_publisherName),
-		m_numberOfPages(a_numberOfPages), m_type(a_type), m_circulation(a_circulation) {}
-
-	friend ostream& operator<<(ostream& out, const book& b)
+		return numerator;
+	}
+	int Denominator() const
 	{
-		out << b.m_authorsSurname << ' ' << b.m_authorsName << ' ' << b.m_bookTitle << ' ' << b.m_yearOfPublishing << ' '
-			<< b.m_publisherName << ' ' << b.m_numberOfPages << ' ';
-
-		switch (b.m_type)
+		return denominator;
+	}
+	Fraction()
+	{
+		numerator = 1;
+		denominator = 1;
+	}
+	Fraction(int n, int d)
+	{
+		numerator = n;
+		if (d == 0)
 		{
-		case typeOfPublication::electronic:
-		{
-			out << "electronic";
-			break;
+			cout << "ERROR: ATTEMPTING TO DIVIDE BY ZERO" << endl;
+			exit(0); // will terminate the program if division by 0 is attempted
 		}
-		case typeOfPublication::paper:
+		else
 		{
-			out << "paper";
-			break;
-		}
-		case typeOfPublication::audio:
-		{
-			out << "audio";
-			break;
-		}
-		case typeOfPublication::unknown:
-		{
-			out << "unknown";
-			break;
-		}
+			denominator = d;
 		}
 
-		out << ' ' << b.m_circulation;
-	
+		//if (n % d == 0 && n >= d)
+		//{
+		//	numerator /= d;
+		//	denominator = 1;
+		//}
+	}
+	friend Fraction operator+(const Fraction& left, const Fraction& right)
+	{
+		int n = left.numerator * right.denominator + right.numerator * left.denominator;
+		int d = left.denominator * right.denominator;
+		return Fraction(n / Fraction::gcd(n, d), d / Fraction::gcd(n, d));
+	}
+	friend Fraction operator-(const Fraction& left, const Fraction& right)
+	{
+		int n = left.numerator * right.denominator - right.numerator * left.denominator;
+		int d = left.denominator * right.denominator;
+		return Fraction(n / Fraction::gcd(n, d), d / Fraction::gcd(n, d));
+	}
+	friend Fraction operator*(const Fraction& left, const Fraction& right)
+	{
+		int n = left.numerator * right.numerator;
+		int d = left.denominator * right.denominator;
+		return Fraction(n / Fraction::gcd(n, d), d / Fraction::gcd(n, d));
+	}
+	friend Fraction operator/(const Fraction& left, const Fraction& right)
+	{
+		int n = left.numerator * right.denominator;
+		int d = left.denominator * right.numerator;
+		return Fraction(n / Fraction::gcd(n, d), d / Fraction::gcd(n, d));
+	}
+	static int gcd(int n, int d)
+	{
+		int remainder;
+		while (d != 0)
+		{
+			remainder = n % d;
+			n = d;
+			d = remainder;
+		}
+		return n;
+	}
+	friend ostream& operator<<(ostream &out, const Fraction& f)
+	{
+		if (f.denominator == 1) // e.g. fraction 2/1 will display simply as 2
+			out << f.numerator;
+		else if (f.numerator == 0)
+			out << 0;
+		else
+			out << f.numerator << "/" << f.denominator;
+
 		return out;
 	}
 
-	friend bool operator<(const book& b1, const book& b2)
+	friend bool operator<(const Fraction& left, const Fraction& right)
 	{
-		return b1.m_circulation < b2.m_circulation ||
-			(b1.m_circulation == b2.m_circulation && b1.m_yearOfPublishing < b2.m_yearOfPublishing) ||
-			(b1.m_circulation == b2.m_circulation && b1.m_yearOfPublishing == b2.m_yearOfPublishing && b1.m_bookTitle < b2.m_bookTitle);
+		if (left.denominator == right.denominator)
+		{
+			return left.numerator < right.numerator;
+		}
+		else
+		{
+			return left.numerator * right.denominator < right.numerator * left.denominator;
+		}
+	}
+	friend bool operator==(const Fraction& left, const Fraction& right)
+	{
+		return left.numerator == right.numerator && left.denominator == right.denominator;
+	}
+};
+
+class Airline
+{
+public:
+	Airline() : m_name(), m_international_code(0), m_number_of_served_lines(0), m_country(), m_internet_site_address(),
+		m_rating_reliability(0) {}
+	Airline(string a_name,
+	int a_international_code,
+	int a_number_of_served_lines,
+	string a_country,
+	string a_internet_site_address,
+	int a_rating_reliability) : m_name(a_name), m_international_code(a_international_code),
+		m_number_of_served_lines(a_number_of_served_lines), m_country(a_country), m_internet_site_address(a_internet_site_address),
+		m_rating_reliability(a_rating_reliability) {}
+
+	friend ostream& operator<<(ostream& out, const Airline& a)
+	{
+		out << a.m_name << ' ' << a.m_international_code << ' ' << a.m_number_of_served_lines << ' '
+			<< a.m_country << ' ' << a.m_internet_site_address << ' ' << a.m_rating_reliability;
+
+		return out;
 	}
 
+	friend bool operator<(const Airline& left, const Airline& right)
+	{
+		return left.m_rating_reliability < right.m_rating_reliability ||
+			(left.m_rating_reliability == right.m_rating_reliability &&
+				left.m_number_of_served_lines < right.m_number_of_served_lines) ||
+			(left.m_rating_reliability == right.m_rating_reliability &&
+				left.m_number_of_served_lines == right.m_number_of_served_lines &&
+				left.m_name < right.m_name);
+	}
 private:
-	string m_authorsSurname;
-	string m_authorsName;
-	string m_bookTitle;
-	int m_yearOfPublishing;
-	string m_publisherName;
-	int m_numberOfPages;
-	typeOfPublication m_type;
-	int m_circulation;
+	string m_name;
+	int m_international_code;
+	int m_number_of_served_lines;
+	string m_country;
+	string m_internet_site_address;
+	int m_rating_reliability;
 };
 
 template <class T>
@@ -339,19 +403,19 @@ public:
 		}
 		else if(!LinkedListParent<T>::tail)
 		{
-			LinkedListParent<T>::tail = new Element<T>(value);
-			LinkedListParent<T>::head->setNext(LinkedListParent<T>::tail);
+			LinkedListParent<T>::tail = LinkedListParent<T>::head;
+			LinkedListParent<T>::head = new Element<T>(value, LinkedListParent<T>::tail);
 			LinkedListParent<T>::tail->setPrevious(LinkedListParent<T>::head);
 			return LinkedListParent<T>::tail;
 		}
 		else
 		{
-			LinkedListParent<T>::tail->setNext(new Element<T>(value));
-			LinkedListParent<T>::tail->getNext()->setPrevious(LinkedListParent<T>::tail);
+			LinkedListParent<T>::head = new Element<T>(value, LinkedListParent<T>::head);
+			LinkedListParent<T>::head->getNext()->setPrevious(LinkedListParent<T>::head);
 
 			LinkedListParent<T>::tail = LinkedListParent<T>::tail->getNext();
 
-			return LinkedListParent<T>::tail;
+			return LinkedListParent<T>::head;
 		}
 	}
 	//чисто виртуальная функция: пока не определимся с типом списка, не сможем реализовать удаление
@@ -503,39 +567,37 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
+	cout << "Вариант 6\n";
 	cout << "Задание 1.1\n";
-	list<char> l;
+	list<Fraction> l;
 
 	for (int i = 0; i < 10; ++i)
 	{
-		push(l, char('A' + i));
+		push(l, Fraction(rand()%10, rand()%10));
 	}
 
 	cout << "Полученный список:\n";
 	print(l);
 	cout << '\n';
 
-	cout << "Только гластные элементы списка:\n";
-	function<bool(const char&)> f = [](const char& x) -> bool
+	cout << "Только правильные дроби:\n";
+	function<bool(const Fraction&)> f = [](const Fraction& x) -> bool
 	{
-		char upX = toupper(x);
-		return upX == 'A' || upX == 'E'
-			|| upX == 'I' || upX == 'O'
-			|| upX == 'U' || upX == 'Y';
+		return x.Numerator() < x.Denominator();
 	};
 
 	print(filter(l, f));
 	cout << '\n';
 
 	cout << "Задание 1.2\n";
-	list<book> l1;
+	list<Airline> l1;
 
-	push(l1, book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	push(l1, book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	push(l1, book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
-	push(l1, book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	push(l1, book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	push(l1, book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	push(l1, Airline("saf", 12, 1, "Россия","https::/", 10));
+	push(l1, Airline("haaah", 13, 8, "США", "https::/", 1));
+	push(l1, Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+	push(l1, Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+	push(l1, Airline("ahasah", 16, 10, "США", "https::/", -5));
+	push(l1, Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
 
 	print(l1);
 
@@ -548,11 +610,11 @@ int main()
 	cout << "Задание 1.3\n";
 
 	doubleLinkedList<int> l2;
-	l2.push(1);
-	l2.push(5);
-	l2.push(7);
+	l2.push(2);
 	l2.push(8);
-	l2.push(-1);
+	l2.push(10);
+	l2.push(15);
+	l2.push(-16);
 
 	while (l2.Number())
 	{
@@ -562,24 +624,24 @@ int main()
 
 	cout << "Задание 1.4\n";
 
-	l2.push(1);
-	l2.push(5);
-	l2.push(7);
+	l2.push(2);
 	l2.push(8);
-	l2.push(-1);
+	l2.push(10);
+	l2.push(15);
+	l2.push(-16);
 	print(l2);
 	cout << '\n';
 
 	cout << "Задание 1.5\n";
 
-	sortDoubleLinkedList<book> l3;
+	sortDoubleLinkedList<Airline> l3;
 
-	l3.push(book("Иванов", "Иван", "Лолита", 1500, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	l3.push(book("Иванов", "Сергей", "Книга", 150, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	l3.push(book("Иванов", "Максим", "Лина", 1, "Кадокава", 10, book::typeOfPublication::paper, 10000));
-	l3.push(book("Иванов", "Владислав", "Программа", 100, "Кадокава", 10, book::typeOfPublication::electronic, 10000));
-	l3.push(book("Иванов", "Рома", "Панда", 15000, "Кадокава", 10, book::typeOfPublication::audio, 10000));
-	l3.push(book("Иванов", "Юля", "Свойства", 1500, "Кадокава", 10, book::typeOfPublication::paper, 10000));
+	l3.push(Airline("saf", 12, 1, "Россия","https::/", 10));
+	l3.push(Airline("haaah", 13, 8, "США", "https::/", 1));
+	l3.push(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+	l3.push(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+	l3.push(Airline("ahasah", 16, 10, "США", "https::/", -5));
+	l3.push(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
 
 	print(l3);
 }

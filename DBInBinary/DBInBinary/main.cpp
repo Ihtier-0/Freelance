@@ -1,48 +1,54 @@
 #include "binaryDB.h"
 
 #include <iostream>
+#include <cmath>
+#include <ctime>
 
 using namespace std;
 
 int main()
 {
-	/*std::ofstream out("db.txt");
-	double i0 = 5;
-	double i1 = 2;
-	double i2 = 2;
-	double i3 = 4;
-	double i4 = 0;
-	double i5 = 5;
-	double i6 = -1;
-	double i7 = 5;
-	double i8 = 6;
-	double i9 = 100;
-	out.write((char*)&i0, sizeof(double));
-	out.write((char*)&i1, sizeof(double));
-	out.write((char*)&i2, sizeof(double));
-	out.write((char*)&i3, sizeof(double));
-	out.write((char*)&i4, sizeof(double));
-	out.write((char*)&i5, sizeof(double));
-	out.write((char*)&i6, sizeof(double));
-	out.write((char*)&i7, sizeof(double));
-	out.write((char*)&i8, sizeof(double));
-	out.write((char*)&i9, sizeof(double));
-	out.close();*/
+	setlocale(LC_ALL, "Russian");
+	srand(time(0));
+
+	int size = 6, maxNumber = 100;
+
+	// запись случайных данных в файл 
+	ofstream out("db.txt");
+	double t;
+	for (int i = 0; i < size; ++i)
+	{
+		t = pow(-1, rand() % 2) * (rand() % 100 + 0.1 * (rand() % 10));
+		out.write((char*)&t, sizeof(double));
+	}
+	out.close();
 
 	binaryDB<double> db("db.txt");
 
-	for (int i = 0; i < db.size(); ++i)
-	{
-		std::cout << db[i] << '\n';
-	}
+	cout << "Тест на int\nДанные из файла:\n";
+	std::cout << db << '\n';
 
-	cout << "size: " << db.size() << '\n';
+	db.add(static_cast<double>(rand()) / static_cast<double>(RAND_MAX) * (maxNumber + maxNumber) - maxNumber);
+	cout << "Добавить в конец случайное число от -100 до 100:\n" << db << '\n';
 
-	db.addByIndex(15, 5);
+	db.addByIndex(static_cast<double>(rand()) / static_cast<double>(RAND_MAX) * (maxNumber + maxNumber) - maxNumber, 3);
+	cout << "Добавить в позицию 3 случайное число от -100 до 100:\n" << db << '\n';
 
-	cout << '\n';
-	for (int i = 0; i < db.size(); ++i)
-	{
-		std::cout << db[i] << '\n';
-	}
+	db.eraseByIndex(6);
+	cout << "Удалить число на 6й позиции:\n" << db << '\n';
+
+	int ind = rand() % db.size();
+	db.erase(db[ind]);
+	cout << "Данные после удаления " << db[ind] << " :\n" << db << '\n';
+
+	db.replace(static_cast<double>(rand()) / static_cast<double>(RAND_MAX) * (maxNumber + maxNumber) - maxNumber, 5);
+	cout << "Заменить элемент на 5й позиции случайным от -100 до 100:\n" << db << '\n';
+
+	cout << "Размер базы данных: " << db.size() << '\n';
+
+	db.sort();
+	cout << "Отсортированные данные:\n" << db << '\n';
+
+	db.addWithKeepingOrder(static_cast<double>(rand()) / static_cast<double>(RAND_MAX) * (maxNumber + maxNumber) - maxNumber);
+	cout << "Добавить случайное число от -100 до 100 с сохранением порядка:\n" << db << '\n';
 }
