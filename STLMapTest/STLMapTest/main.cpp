@@ -523,98 +523,109 @@ int main()
 	setlocale(LC_ALL, "Russian");
 
 	cout << "Задание 2.1\n\n";
-
-	map<int, int> m;
-
-	m[1] = 1;
-	m[2] = 15;
-	m[3] = 6;
-	m[4] = 7;
-	m[5] = 8;
-	m[6] = 40;
-	m[7] = 5;
-
-	cout << "Авиакомпании:\n";
-	print(m);
-
-	int code;
-	int lines;
-	cout << "Введите международный код авиакомпании: ";
-	cin >> code;
-
-	if (find_key<int, int>(m, code, lines))
 	{
-		cout << "Количество обслуживаемых линий: " << lines << '\n';
-	}
-	else
-	{
-		cout << "Такой авиакомпани нет!\n";
-	}
+		map<int, int> m;
 
-	cout << "Введите количество обслуживаемых линий авиакомпании: ";
-	cin >> lines;
+		m[1] = 1;
+		m[2] = 15;
+		m[3] = 6;
+		m[4] = 7;
+		m[5] = 8;
+		m[6] = 40;
+		m[7] = 5;
 
-	if (find_value<int, int>(m, lines, code))
-	{
-		cout << "Международный код авиакомпании с таким количеством линий: " << code << '\n';
-	}
-	else
-	{
-		cout << "Такой авиакомпании нет!\n";
-	}
+		cout << "Авиакомпании:\n";
+		print(m);
 
-	function<bool(pair<int, int>)> f = [](const pair<int, int>& x) -> bool
-	{
-		return x.first > 5;
-	};
+		int code;
+		int lines;
+		cout << "Введите международный код авиакомпании: ";
+		cin >> code;
 
-	cout << "Авиакомпании с международным кодом больше 5:\n";
-	print(filter(m, f));
-
-	cout << "\nЗадание 2.2\n\n";
-
-	std::priority_queue < Airline > q;
-	q.push(Airline("saf", 12, 1, "Россия", "https::/", 10));
-	q.push(Airline("haaah", 13, 8, "США", "https::/", 1));
-	q.push(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
-	q.push(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
-	q.push(Airline("ahasah", 16, 10, "США", "https::/", -5));
-	q.push(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
-	
-	print_queue(q);
-	
-	cout << "Задание 2.3\n";
-
-	Tree<Airline> t;
-	
-	t.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
-	t.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
-	t.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
-	t.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
-	t.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
-	t.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
-
-	t.PreOrder(t.getRoot(), [](Node<Airline>*x)
+		if (find_key<int, int>(m, code, lines))
 		{
-			cout << *x;
-		});
+			cout << "Количество обслуживаемых линий: " << lines << '\n';
+		}
+		else
+		{
+			cout << "Такой авиакомпани нет!\n";
+		}
 
-	cout << "\n\nЗадание 2.4\n\n";
+		cout << "Введите количество обслуживаемых линий авиакомпании: ";
+		cin >> lines;
 
-	Heap<Airline> Tree;
-	Tree.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
-	Tree.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
-	Tree.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
-	Tree.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
-	Tree.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
-	Tree.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
+		if (find_value<int, int>(m, lines, code))
+		{
+			cout << "Международный код авиакомпании с таким количеством линий: " << code << '\n';
+		}
+		else
+		{
+			cout << "Такой авиакомпании нет!\n";
+		}
 
-	/*void(*f_ptr)(NodeHeap<book>*); f_ptr = print;
-	Tree.InOrder(f_ptr);*/
+		function<bool(pair<int, int>)> f = [](const pair<int, int>& x) -> bool
+		{
+			return x.first > 5;
+		};
 
-	while (Tree.getCount())
+		cout << "Авиакомпании с международным кодом больше 5:\n";
+		print(filter(m, f));
+	}
+	cout << "\nЗадание 2.2\n\n";
 	{
-		Tree.ExtractMax().print();
-		cout << '\n';
+		std::priority_queue < Airline > q;
+		q.push(Airline("saf", 12, 1, "Россия", "https::/", 10));
+		q.push(Airline("haaah", 13, 8, "США", "https::/", 1));
+		q.push(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+		q.push(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+		q.push(Airline("ahasah", 16, 10, "США", "https::/", -5));
+		q.push(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
+
+		print_queue(q);
+	}
+	cout << "Задание 2.3\n";
+	{
+		Tree<Airline> t;
+
+		t.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
+		t.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
+		t.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+		t.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+		t.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
+		t.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
+
+		t.PreOrder(t.getRoot(), [](Node<Airline>* x)
+			{
+				cout << *x;
+			});
+	}
+	cout << "\n\nЗадание 2.4\n\n";
+	{
+		Heap<Airline> Tree;
+		Tree.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
+		Tree.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
+		Tree.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+		Tree.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+		Tree.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
+		Tree.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
+
+		void(*f_ptr)(NodeHeap<Airline>*); f_ptr = print;
+		Tree.InOrder(f_ptr);
+	}
+	cout << "\n\nЗадание 2.5\n\n";
+	{
+		Heap<Airline> Tree;
+		Tree.Add(Airline("saf", 12, 1, "Россия", "https::/", 10));
+		Tree.Add(Airline("haaah", 13, 8, "США", "https::/", 1));
+		Tree.Add(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+		Tree.Add(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+		Tree.Add(Airline("ahasah", 16, 10, "США", "https::/", -5));
+		Tree.Add(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
+
+		while (Tree.getCount())
+		{
+			Tree.ExtractMax().print();
+			cout << '\n';
+		}
 	}
 }

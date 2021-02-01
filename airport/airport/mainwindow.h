@@ -10,9 +10,16 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(airportTable *a_table, QWidget *parent = nullptr);
-    ~MainWindow();
 
 private:
     airportTable *m_table;
+
+public slots:
+    void openFile();
+    void saveTable();
+    void add();
+    void flightsToTheEnteredDestinationWithFreeSeats();
+    void deleteAllRecordsWithSpecificFlightNumbers();
+    void updateTheNumberOfFreeSeatsInTheCabinInTheSpecifiedFlightNumber();
 };
 #endif // MAINWINDOW_H

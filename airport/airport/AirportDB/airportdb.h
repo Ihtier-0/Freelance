@@ -6,10 +6,13 @@
 
 #include "Flight/flight.h"
 
-class binaryAirportDB
+#include <functional>
+
+class AirportDB
 {
 public:
-    binaryAirportDB(const QString& a_dbFileName);
+    AirportDB(const QString& a_dbFileName);
+    AirportDB();
 
     void add(const Flight& f);
     void addByIndex(const Flight& f, const qint64& index);
@@ -19,7 +22,12 @@ public:
 
     void replace(const Flight& f, const qint64& index);
 
+    int findIndex(const qint64 &FlightNumbers);
+
     qint64 size();
+    QString getDBFileAddress();
+
+    void openFile(const QString& file);
 
     Flight operator[](const qint64& index);
 

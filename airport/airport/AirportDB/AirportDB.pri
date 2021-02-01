@@ -4,8 +4,8 @@ CONFIG += BINARYAIRPORTDB_PRI
 INCLUDEPATH += $$PWD/../
 
 HEADERS += \
-    $$PWD/binaryAirportDB.h
+    $$PWD/airportdb.h
 
 SOURCES += \
-    $$PWD/binaryAirportDB.cpp
+    $$PWD/airportdb.cpp
 }

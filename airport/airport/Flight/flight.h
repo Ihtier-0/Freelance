@@ -2,7 +2,7 @@
 #define FLIGHT_H
 
 #include <QDateTime>
-#include <QString>
+#include <string>
 #include <iostream>
 
 // класс хранящий информацию о рейсе
@@ -10,6 +10,7 @@ class Flight
 {
 public:
     Flight();
+    Flight(const Flight& f);
     Flight(const qint64& a_flightNumber,
            const QString& a_destination,
            const QDateTime& a_departureTime,
@@ -22,16 +23,11 @@ public:
     QDateTime arrivalTime() const;
     qint64 numberFreeSeatsInCabin() const;
 
-    QString toQString();
-    friend std::ostream& operator<<(std::ostream& out, const Flight& f)
-    {
-        out << f.m_flightNumber << ' ' << f.m_destination.toStdString()
-            << ' ' << f.m_departureTime.toString().toStdString()
-            << ' ' << f.m_arrivalTime.toString().toStdString()
-            << ' ' << f.m_numberFreeSeatsInCabin;
+    QString toQString() const;
 
-        return out;
-    }
+    friend std::ostream &operator<<(std::ostream& out, const Flight& f);
+    friend std::istream &operator>>(std::istream& is, Flight& f);
+    Flight& operator=(const Flight& x);
 private:
     // номер рейса
     qint64 m_flightNumber;
@@ -45,7 +41,8 @@ private:
     qint64 m_numberFreeSeatsInCabin;
 
     friend bool operator==(const Flight& left, const Flight& right);
-    friend bool operator!=(const Flight& left, const Flight& right);
+    friend bool operator!=(const Flight& left, Flight& right);
 };
+
 
 #endif // FLIGHT_H

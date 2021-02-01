@@ -386,7 +386,6 @@ public:
 	}
 };
 
-// Очередь
 template <class T>
 class doubleLinkedList : public IteratedLinkedList<T>
 {
@@ -569,79 +568,84 @@ int main()
 
 	cout << "Вариант 6\n";
 	cout << "Задание 1.1\n";
-	list<Fraction> l;
-
-	for (int i = 0; i < 10; ++i)
 	{
-		push(l, Fraction(rand()%10, rand()%10));
+		list<Fraction> l;
+
+		for (int i = 0; i < 10; ++i)
+		{
+			push(l, Fraction(rand() % 10, rand() % 10));
+		}
+
+		cout << "Полученный список:\n";
+		print(l);
+		cout << '\n';
+
+		cout << "Только правильные дроби:\n";
+		function<bool(const Fraction&)> f = [](const Fraction& x) -> bool
+		{
+			return x.Numerator() < x.Denominator();
+		};
+
+		print(filter(l, f));
+		cout << '\n';
 	}
-
-	cout << "Полученный список:\n";
-	print(l);
-	cout << '\n';
-
-	cout << "Только правильные дроби:\n";
-	function<bool(const Fraction&)> f = [](const Fraction& x) -> bool
-	{
-		return x.Numerator() < x.Denominator();
-	};
-
-	print(filter(l, f));
-	cout << '\n';
-
 	cout << "Задание 1.2\n";
-	list<Airline> l1;
-
-	push(l1, Airline("saf", 12, 1, "Россия","https::/", 10));
-	push(l1, Airline("haaah", 13, 8, "США", "https::/", 1));
-	push(l1, Airline("ahhah", 14, 1, "Япония", "https::/", 5));
-	push(l1, Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
-	push(l1, Airline("ahasah", 16, 10, "США", "https::/", -5));
-	push(l1, Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
-
-	print(l1);
-
-	cout << "pop:\n";
-	while (!l1.empty())
 	{
-		cout << pop(l1) << '\n';
-	}
+		list<Airline> l1;
 
+		push(l1, Airline("saf", 12, 1, "Россия", "https::/", 10));
+		push(l1, Airline("haaah", 13, 8, "США", "https::/", 1));
+		push(l1, Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+		push(l1, Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+		push(l1, Airline("ahasah", 16, 10, "США", "https::/", -5));
+		push(l1, Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
+
+		print(l1);
+
+		cout << "pop:\n";
+		while (!l1.empty())
+		{
+			cout << pop(l1) << '\n';
+		}
+	}
 	cout << "Задание 1.3\n";
-
-	doubleLinkedList<int> l2;
-	l2.push(2);
-	l2.push(8);
-	l2.push(10);
-	l2.push(15);
-	l2.push(-16);
-
-	while (l2.Number())
 	{
-		cout << *(l2.pop()) << ' ';
+		doubleLinkedList<int> l2;
+		l2.push(2);
+		l2.push(8);
+		l2.push(10);
+		l2.push(15);
+		l2.push(-16);
+
+		while (l2.Number())
+		{
+			cout << *(l2.pop()) << ' ';
+		}
+		cout << '\n';
 	}
-	cout << '\n';
-
 	cout << "Задание 1.4\n";
+	{
+		doubleLinkedList<int> l2;
 
-	l2.push(2);
-	l2.push(8);
-	l2.push(10);
-	l2.push(15);
-	l2.push(-16);
-	print(l2);
-	cout << '\n';
-
+		l2.push(2);
+		l2.push(8);
+		l2.push(10);
+		l2.push(15);
+		l2.push(-16);
+		print(l2);
+		cout << '\n';
+	}
 	cout << "Задание 1.5\n";
+	{
+		sortDoubleLinkedList<Airline> l3;
 
-	sortDoubleLinkedList<Airline> l3;
+		l3.push(Airline("saf", 12, 1, "Россия", "https::/", 10));
+		l3.push(Airline("haaah", 13, 8, "США", "https::/", 1));
+		l3.push(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
+		l3.push(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
+		l3.push(Airline("ahasah", 16, 10, "США", "https::/", -5));
+		l3.push(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
 
-	l3.push(Airline("saf", 12, 1, "Россия","https::/", 10));
-	l3.push(Airline("haaah", 13, 8, "США", "https::/", 1));
-	l3.push(Airline("ahhah", 14, 1, "Япония", "https::/", 5));
-	l3.push(Airline("qyqyeuq", 15, 4, "Китай", "https::/", 7));
-	l3.push(Airline("ahasah", 16, 10, "США", "https::/", -5));
-	l3.push(Airline("ashashah ", 17, 7, "Россия", "https::/", -10));
-
-	print(l3);
+		print(l3);
+	}
 }
