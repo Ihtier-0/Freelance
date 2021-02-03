@@ -43,12 +43,15 @@ void airportTable::Update()
     {
         this->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
     }
+
+    for(int i = 0; i < m_size; ++i)
+    {
+        this->verticalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
+    }
 }
 
 void airportTable::add(const Flight &f)
 {
-    m_db.add(f);
-
     this->insertRow(m_size);
     this->setItem(m_size, 0, new QTableWidgetItem(QString::number(f.flightNumber())));
     this->setItem(m_size, 1, new QTableWidgetItem(f.destination()));

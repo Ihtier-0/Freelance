@@ -48,6 +48,7 @@ qint64 Flight::numberFreeSeatsInCabin() const
 
 QString Flight::toQString() const
 {
+    // перевод всех полей класса в QString
     return QString::number(m_flightNumber) + ' '
             + m_destination + ' '
             + m_departureTime.toString() + ' '
@@ -91,21 +92,27 @@ std::istream &operator>>(std::istream& is, Flight& f)
 {
     std::string destination;
 
+    // ввод номера рейса и пункта назначения, пунк назначения вводится в std::string
+    // потому что используются std потоки
     is >> f.m_flightNumber >> destination;
 
     f.m_destination = destination.c_str();
 
     std::string tmp1, tmp2, tmp3, tmp4, tmp5;
+    // ввод дня недели, месяца, числа, времени и года
     is >> tmp1 >> tmp2 >> tmp3 >> tmp4 >> tmp5;
 
     QString dateTime((tmp1 + ' ' + tmp2 + ' ' + tmp3 + ' ' + tmp4 + ' ' + tmp5).c_str());
+    // перевод из строки в дату и время
     f.m_departureTime = QDateTime::fromString(dateTime);
 
+    // ввод дня недели, месяца, числа, времени и года
     is >> tmp1 >> tmp2 >> tmp3 >> tmp4 >> tmp5;
     dateTime = (tmp1 + ' ' + tmp2 + ' ' + tmp3 + ' ' + tmp4 + ' ' + tmp5).c_str();
-
+    // перевод из строки в дату и время
     f.m_arrivalTime = QDateTime::fromString(dateTime);
 
+    // ввод количества свободных мест
     is >> f.m_numberFreeSeatsInCabin;
 
     return is;
