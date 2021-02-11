@@ -143,7 +143,7 @@ void MainWindow::add()
     }
 
     // вводим минуты
-    min = QInputDialog::getInt(this, tr("Input departure date hour:"), tr("departure date hour:"));
+    min = QInputDialog::getInt(this, tr("Input departure date hour:"), tr("departure date minut:"));
 
     // проверка что минуты не выходят за границу
     if(min < 0 || min > 59)

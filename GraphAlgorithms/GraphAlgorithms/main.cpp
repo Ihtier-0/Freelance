@@ -5,7 +5,7 @@
 
 using namespace std;
 
-vector<vector<int>> Prim
+vector<vector<int>> Prima
 // матрица смежности, значение бессконечности
 (const vector<vector<int>>& g, const int &infinity)
 {
@@ -168,7 +168,7 @@ vector<pair<int, int>> vertexDegree(const vector<vector<int>>& g)
 	return result;
 }
 
-double averageVertexDegree(const vector<pair<int, int>>& g)
+double average_vertex_degree(const vector<pair<int, int>>& g)
 {
 	double sum = 0;
 	int n = g.size();
@@ -205,7 +205,7 @@ void outVector(const vector<int>& v)
 	}
 }
 
-void printPairs(const vector<pair<int, int>>& g)
+void print_pairs(const vector<pair<int, int>>& g)
 {
 	int n = g.size();
 
@@ -222,51 +222,50 @@ int main()
 	setlocale(LC_ALL, "Russian");
 	// входные данные
 
-	vector<vector<int>> g =
+	vector<vector<int>> adjacencyMatrix =
 	{
-{ 0, 5, 6, 6, 6, 4, 5, 0, 0, 8, 8, 4, 4 },
-{ 5, 0, 8, 0, 3, 8, 4, 8, 6, 6, 6, 3, 4 },
-{ 6, 8, 0, 2, 0, 0, 0, 9, 3, 5, 3, 8, 1 },
-{ 6, 0, 2, 0, 2, 4, 7, 7, 7, 9, 5, 5, 5 },
-{ 6, 3, 0, 2, 0, 1, 5, 5, 4, 4, 1, 4, 2 },
-{ 4, 8, 0, 4, 1, 0, 8, 1, 5, 4, 5, 8, 6 },
-{ 5, 4, 0, 7, 5, 8, 0, 6, 9, 0, 1, 2, 0 },
-{ 0, 8, 9, 7, 5, 1, 6, 0, 4, 6, 7, 3, 3 },
-{ 0, 6, 3, 7, 4, 5, 9, 4, 0, 4, 4, 1, 1 },
-{ 8, 6, 5, 9, 4, 4, 0, 6, 4, 0, 9, 2, 7 },
-{ 8, 6, 3, 5, 1, 5, 1, 7, 4, 9, 0, 6, 9 },
-{ 4, 3, 8, 5, 4, 8, 2, 3, 1, 2, 6, 0, 3 },
-{ 4, 4, 1, 5, 2, 6, 0, 3, 1, 7, 9, 3, 0 },
+{ 0, 5, 2, 7, 4, 8, 8, 8, 0, 6, 8, 4 },
+{ 5, 0, 7, 2, 0, 8, 9, 6, 4, 2, 5, 4 },
+{ 2, 7, 0, 1, 3, 3, 8, 3, 2, 6, 3, 6 },
+{ 7, 2, 1, 0, 6, 8, 0, 6, 3, 9, 4, 3 },
+{ 4, 0, 3, 6, 0, 9, 2, 3, 5, 9, 6, 8 },
+{ 8, 8, 3, 8, 9, 0, 9, 5, 4, 6, 9, 1 },
+{ 8, 9, 8, 0, 2, 9, 0, 0, 0, 5, 5, 8 },
+{ 8, 6, 3, 6, 3, 5, 0, 0, 0, 7, 6, 3 },
+{ 0, 4, 2, 3, 5, 4, 0, 0, 0, 6, 5, 4 },
+{ 6, 2, 6, 9, 9, 6, 5, 7, 6, 0, 8, 1 },
+{ 8, 5, 3, 4, 6, 9, 5, 6, 5, 8, 0, 9 },
+{ 4, 4, 6, 3, 8, 1, 8, 3, 4, 1, 9, 0 },
 	};
 
 	cout << "Исходный граф:\n";
-	printMatrix(g);
+	printMatrix(adjacencyMatrix);
 
 	// матрица смежности остова
-	vector<vector<int>> ostov = Prim(g, maxInMatrix(g) + 1);
+	vector<vector<int>> O = Prima(adjacencyMatrix, maxInMatrix(adjacencyMatrix) + 1);
 
 	cout << "Мимнимальный остов:\n";
-	printMatrix(ostov);
+	printMatrix(O);
 
 	int v;
 	cout << "Введите вершину с которой нужно начать поиск в глубину: ";
 	cin >> v;
 	cout << "Поиск в глубину в остове:\n";
-	outVector(dfs(ostov, v));
+	outVector(dfs(O, v));
 	cout << '\n';
 
 	cout << "Введите вершину от которой нужно найти расстояние до всех остальных: ";
 	cin >> v;
 	cout << "Расстояние от " << v << "-й вершины до всех остальных:\n";
-	outVector(Dijkstra(g, v, maxInMatrix(g) + 1));
+	outVector(Dijkstra(adjacencyMatrix, v, maxInMatrix(adjacencyMatrix) + 1));
 	cout << '\n';
 
 	// вектор (вершина, cтепень)
-	vector<pair<int, int>> ostovVertexDegree = vertexDegree(ostov);
+	vector<pair<int, int>> ostovVertexDegree = vertexDegree(O);
 	cout << "Степени вершин остова(вершина, степень):\n";
-	printPairs(ostovVertexDegree);
+	print_pairs(ostovVertexDegree);
 
-	cout << "Средняя степень вершин остова(вершина, степень): " << averageVertexDegree(ostovVertexDegree) << '\n';
+	cout << "Средняя степень вершин остова(вершина, степень): " << average_vertex_degree(ostovVertexDegree) << '\n';
 
 	return 0;
 }

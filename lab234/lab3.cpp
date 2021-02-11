@@ -6,54 +6,6 @@
 
 using namespace std;
 
-void printMaxtrix(const double * const * const &matrix, const int &size)
-{
-    for(int i = 0; i < size; ++i)
-    {
-        for(int j = 0; j < size; ++j)
-        {
-            wcout << matrix[i][j] << ' ';
-        }
-        wcout << '\n';
-    }
-}
-
-void fillMatrix(double **matrix, const int &size)
-{
-    for(int i = 0; i < size; ++i)
-    {
-        for(int j = 0; j < size; ++j)
-        {
-            if(rand() % 2)
-            {
-                matrix[i][j] = static_cast<double>(rand()) / static_cast<double>(RAND_MAX) * 200 - 100;
-            }
-            else // такой рандом чтобы какие-то числа были целыми
-            {
-                matrix[i][j] = pow(-1, rand() % 2) * (rand() % 100);
-            }
-        }
-    }
-}
-
-int sumIntPosiriveElements(const double * const * const &matrix, const int &size)
-{
-    int sum = 0;
-
-    for(int i = 0; i < size; ++i)
-    {
-        for(int j = 0; j < size; ++j)
-        {
-            if(matrix[i][j] > 0 && matrix[i][j] == static_cast<int>(matrix[i][j]))
-            {
-                sum += matrix[i][j];
-            }
-        }
-    }
-
-    return sum;
-}
-
 void lab3()
 {
     srand(time(0));
@@ -83,17 +35,13 @@ void lab3()
         }
     }
 
-    double ** matrix = new double*[size];
-    for(int i = 0; i < size; ++i)
-    {
-        matrix[i] = new double[size];
-    }
+    double matrix[20][20];
 
-    fillMatrix(matrix, size);
+    fillMatrix(&matrix);
     wcout << L"Сгенерированная матрица:\n";
-    printMaxtrix(matrix, size);
+    printMaxtrix(&matrix);
 
-    int sumPositive = sumIntPosiriveElements(matrix, size);
+    int sumPositive = sumIntPosiriveElements(&matrix);
 
     if(sumPositive == 0)
     {
