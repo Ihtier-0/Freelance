@@ -303,6 +303,10 @@ public:
 
         return tmp;
     }
+    int size()
+    {
+        return m_size;
+    }
     void executeIf(std::function<bool(const T&)> condition, std::function<void(T&)> action)
     {
         const std::string tmpFileName = "tmpFile";
