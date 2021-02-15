@@ -69,7 +69,7 @@ double& stripMatrix::operator()(int row, int column)
 
     if (NewColumn >= 2 * m_lenght + 1 || NewColumn < 0)
     {
-        throw std::exception("close plase");
+        throw std::exception("going beyond the bounds of the tape");
     }
 
     return m_array[row][NewColumn];
