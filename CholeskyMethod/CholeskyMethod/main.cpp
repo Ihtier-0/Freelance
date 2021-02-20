@@ -8,24 +8,88 @@ using namespace std;
 
 int main()
 {
-	stripMatrix a(5, 2, {
-		{0,0,1,1,1},
-		{0,1,1,1,1},
-		{1,1,1,1,1},
-		{1,1,1,1,0},
-		{1,1,1,0,0},
-		});
+	stripMatrix a;
+	std::vector<double> x, f, xSolve;
 
-	cout << "a:\n" << a << "\n\n";
+	int countOfIteration = 5;
 
-	std::vector<double> f = { 1,1,1,1,1,1 }, x;
+	double sumRelativeSolutionError = 0;
 
-	CholeskySolver s(a, f);
-
-	if (!s.Solve(x))
+	for (int size : { 40, 400 })
 	{
-		cout << "false\n";
+		for (int length : {size / 10, static_cast<int>(sqrt(size))})
+		{
+			for (int i = 0; i < countOfIteration; ++i)
+			{
+				generateStripMatrixSystem(a, size, length, x, f, 10);
+				CholeskySolver s(a, f);
+
+				if (!s.Solve(xSolve))
+				{
+					--i;
+					continue;
+				}
+
+				sumRelativeSolutionError += relativeSolutionError(x, xSolve);
+			}
+			std::cout << "\nsize: " << size
+				<< "\nlength: " << length
+				<< "\nlength\\size: " << static_cast<double>(length) / size
+				<< "\nRelativeSolutionError: " << sumRelativeSolutionError / countOfIteration << "\n\n";
+		}
 	}
 
-	cout << x << '\n';
+	cout << "well conditioned: \n";
+
+	int length;
+
+	for (int size : { 10, 100 })
+	{
+		length = size / 10;
+		for (int i = 0; i < 2; ++i)
+		{
+			generateStripMatrixSystem(a, size, length, x, f, 10);
+			CholeskySolver s(a, f);
+
+			if (!s.Solve(xSolve))
+			{
+				--i;
+				continue;
+			}
+
+			std::cout << i
+				<< "\nsize: " << size
+				<< "\nlength: " << length
+				<< "\nRelativeSolutionError: " << relativeSolutionError(x, xSolve) << "\n\n";
+		}
+	}
+
+	cout << "bad conditioned: \n";
+
+	for (int k : {2, 4, 6})
+	{
+		for (int size : { 10 })
+		{
+			length = size / 10;
+			for (int i = 0; i < 2; ++i)
+			{
+				generateIllConditionStripMatrixSystem(a, size, length, x, f, 10, k);
+
+				CholeskySolver s(a, f);
+
+				if (!s.Solve(xSolve))
+				{
+					--i;
+					continue;
+				}
+
+				std::cout << i
+					<< "\nsize: " << size
+					<< "\nlength: " << length
+					<< "\norderIllConditioned: " << k
+					<< "\nRelativeSolutionError: " << relativeSolutionError(x, xSolve) << "\n\n";
+			}
+		}
+	}
 }
+

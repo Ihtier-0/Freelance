@@ -22,7 +22,8 @@ void lab4()
               << L"Введите слово: \n";
 
     wstring str;
-    wcin >> str;
+    wcin.get();
+    getline(wcin, str);
 
     if(isPalindrome(str))
     {

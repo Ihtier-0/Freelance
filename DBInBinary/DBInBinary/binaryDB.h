@@ -21,6 +21,7 @@ public:
 
         m_size = in.tellg() / sizeof(T);
     }
+
     // добавление строки
     void add(const T& f)
     {
@@ -30,12 +31,19 @@ public:
 
         ++m_size;
     }
+    
     // вставка по логическому номеру
     void addByIndex(const T& f, const int& index)
     {
-        if (index >= m_size || index < 0)
+        if (index > m_size || index < 0)
         {
             throw std::exception("out of range!");
+        }
+
+        if (index == m_size)
+        {
+            this->add(f);
+            return;
         }
 
         int i = -1;
@@ -69,6 +77,7 @@ public:
         std::remove(m_dbFileName.c_str());
         std::rename(tmpFileName.c_str(), m_dbFileName.c_str());
     }
+    
     void eraseByIndex(const int& index)
     {
         if (index >= m_size || index < 0)
@@ -107,6 +116,7 @@ public:
         std::remove(m_dbFileName.c_str());
         std::rename(tmpFileName.c_str(), m_dbFileName.c_str());
     }
+    
     // удаление
     void erase(const T& f)
     {
@@ -138,6 +148,7 @@ public:
         std::remove(m_dbFileName.c_str());
         std::rename(tmpFileName.c_str(), m_dbFileName.c_str());
     }
+  
     // обновление строки
     void replace(const T& f, const int& index)
     {
@@ -153,10 +164,12 @@ public:
 
         in.write((char*)&f, sizeof(T));
     }
+    
     int size() const
     {
         return m_size;
     }
+    
     // сортировка
     void sort()
     {
@@ -268,6 +281,7 @@ public:
         remove("smsort_tmp_1");
         remove("smsort_tmp_2");
     }
+    
     // вставка с сохранением порядка
     void addWithKeepingOrder(const T& f)
     {
@@ -287,6 +301,7 @@ public:
 
         this->addByIndex(f, i);
     }
+
     // извлечение строки
     T operator[](const int& index) const
     {
@@ -303,10 +318,7 @@ public:
 
         return tmp;
     }
-    int size()
-    {
-        return m_size;
-    }
+
     void executeIf(std::function<bool(const T&)> condition, std::function<void(T&)> action)
     {
         const std::string tmpFileName = "tmpFile";
@@ -329,6 +341,7 @@ public:
         std::remove(m_dbFileName.c_str());
         std::rename(tmpFileName.c_str(), m_dbFileName.c_str());
     }
+
     friend std::ostream& operator<<(std::ostream& out, const binaryDB<T> db)
     {
         for (int i = 0; i < db.size(); ++i)

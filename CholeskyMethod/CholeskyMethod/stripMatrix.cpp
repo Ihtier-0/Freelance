@@ -33,6 +33,10 @@ stripMatrix::stripMatrix(int a_size, int a_lenght)
     }
 }
 
+stripMatrix::stripMatrix() : m_size(0), m_lenght(0), m_array() {}
+
+stripMatrix::stripMatrix(const stripMatrix& s) : m_size(s.m_size), m_lenght(s.m_lenght), m_array(s.m_array) {}
+
 const double const & stripMatrix::operator()(int row, int column) const
 {
     if (row > m_size || row < 0)
@@ -85,6 +89,19 @@ int stripMatrix::lenght() const
     return m_lenght;
 }
 
+stripMatrix& stripMatrix::operator=(const stripMatrix& s)
+{
+    // Проверка на самоприсваивание
+    if (this == &s)
+    {
+        return *this;
+    }
+    
+    m_size = s.m_size;
+    m_lenght = s.m_lenght;
+    m_array = s.m_array;
+}
+
 std::ostream& operator<<(std::ostream& out, const stripMatrix& Matrix)
 {
     int size = Matrix.m_size;
@@ -112,11 +129,34 @@ std::vector<double> operator*(const stripMatrix& sm, const std::vector<double>& 
 
     std::vector<double> result(size, 0);
 
+    int length = sm.m_lenght;
+
     for (int i = 0; i < size; ++i)
     {
-        for (int j = 0; j < size; ++j)
+        for (int j = std::max(0, i - length); j < std::min(size, i + length + 1); j++)
         {
             result[i] += sm(i, j) * v[j];
+        }
+    }
+
+    return result;
+}
+
+stripMatrix operator*(const stripMatrix& left, const stripMatrix& right)
+{
+    int size = left.size();
+    int length = left.m_lenght;
+
+    stripMatrix result(size, length);
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = std::max(0, i - length); j < std::min(size, i + length + 1); j++)
+        {
+            for (unsigned int k = 0; k < size; k++)
+            {
+                result(i,j) += left(i,k) * right(k,j);
+            }
         }
     }
 

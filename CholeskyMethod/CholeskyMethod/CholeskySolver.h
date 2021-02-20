@@ -17,9 +17,6 @@ private:
 	stripMatrix m_matrix;
 	std::vector<double> m_f;
 
-	int K0(const int& i);
-	int KN(const int& i);
-
 	// разложить matrix по LU теореме
 	bool createUpperAndLowerTriangularMatrix(stripMatrix& UpperTriangularMatrix,
 		stripMatrix& LowerTriangularMatrix);
