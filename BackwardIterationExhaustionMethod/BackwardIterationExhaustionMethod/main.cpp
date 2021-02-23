@@ -9,8 +9,8 @@ int main()
 {
     std::vector<std::vector<double>> matrix;
     std::vector<std::vector<double>> EigenVectors;
-    std::vector<double> EigenValues
-        ;
+    std::vector<double> EigenValues;
+
     std::pair<double, double> FirstAndSecondEigenvalue;
     std::pair<std::vector<double>, std::vector<double>> FirstAndSecondEigenvector;
     double ThirdMinimumEigenvalue;
