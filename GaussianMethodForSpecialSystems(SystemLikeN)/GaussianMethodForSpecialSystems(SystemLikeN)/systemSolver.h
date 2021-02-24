@@ -11,9 +11,8 @@ public:
         const std::vector<double>& c,
         const std::vector<double>& f,
         const std::vector<double>& p,
-        const int& whenP,
         const std::vector<double>& q,
-        const int& whenQ);
+        const int& k);
 
     bool solveSystem(std::vector<double>& answer);
 private:
@@ -27,9 +26,10 @@ private:
     std::vector<double> m_b;
     std::vector<double> m_c;
     std::vector<double> m_f;
-    std::vector<double> m_p;
-    std::vector<double> m_q;
+    std::vector<double> m_p; // k-1 столбец
+    std::vector<double> m_q; // k-й столбец
 
-    int m_WhenP;
-    int m_WhenQ;
+    int m_k;
+
+    friend std::ostream& operator<<(std::ostream& out, const systemSolver& ss);
 };

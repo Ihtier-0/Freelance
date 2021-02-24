@@ -3,15 +3,17 @@
 #include <vector>
 #include <iostream>
 
+std::ostream& operator<<(std::ostream& out, const std::vector<double>& v);
+std::ostream& operator<<(std::ostream& out, const std::vector<std::vector<double>>& matrix);
+
 // генерация матрицы х - рандомный
 void generateMatrixForSystemSolver(std::vector<double>& a,
     std::vector<double>& b,
     std::vector<double>& c,
     std::vector<double>& f,
     std::vector<double>& p,
-    unsigned int& WhenP,
     std::vector<double>& q,
-    unsigned int& WhenQ,
+    unsigned int& k,
     std::vector<double>& x,
     const unsigned int& size = rand(),
     const int& maxInVectors = std::numeric_limits<int>::max());
@@ -22,21 +24,19 @@ void generateMatrixForSystemSolverWhereXIdentity(std::vector<double>& a,
     std::vector<double>& c,
     std::vector<double>& f,
     std::vector<double>& p,
-    unsigned int& WhenP,
     std::vector<double>& q,
-    unsigned int& WhenQ,
+    unsigned int& k,
     std::vector<double>& x,
     const unsigned int& size = rand(),
     const int& maxInVectors = std::numeric_limits<int>::max());
 
-void fillMatrix(std::vector<std::vector<double>>& matrix,
+void fillMatrix(std::vector<std::vector<double>>& matrix, //заполнение матрицы векторами, которые сгенерировали
     const std::vector<double>& a,
     const std::vector<double>& b,
     const std::vector<double>& c,
     const std::vector<double>& p,
-    const unsigned int& WhenP,
     const std::vector<double>& q,
-    const unsigned int& WhenQ);
+    const unsigned int& k);
 
 void makeIdentity(std::vector<double>& vector);
 
